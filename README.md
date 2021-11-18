@@ -1,2 +1,14 @@
 # viber2
-ПМС Project by Alexandrina, Vladislav and Yoan
+---
+ПМС проект от Александрина, Владислав и Йоан
+
+## Как?
+---
+
+**Сървър програмиран с:**
+- Eclipse IDE
+- Java
+
+**База данни с помощта на:**
+- PostgreSQL
+- pgAdmin 4
