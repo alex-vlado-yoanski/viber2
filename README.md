@@ -12,3 +12,7 @@
 **База данни с помощта на:**
 - PostgreSQL
 - pgAdmin 4
+- Hibernate
+
+**Други библиотеки**
+- [argon2-jvm](https://github.com/phxql/argon2-jvm "За хеширане на пароли")
