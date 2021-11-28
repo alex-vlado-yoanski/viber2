@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users(
     id        	INT GENERATED ALWAYS AS IDENTITY,
     name       	VARCHAR(50) NOT NULL,
-	password	VARCHAR(50) NOT NULL,
+	password	VARCHAR(97) NOT NULL,
 	
 	CONSTRAINT pk_users PRIMARY KEY(id)
 );
