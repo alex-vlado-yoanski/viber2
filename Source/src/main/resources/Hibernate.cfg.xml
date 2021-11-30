@@ -4,9 +4,9 @@
 	<session-factory>
 		<property name="hbm2ddl.auto">update</property>
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-		<!-- В случай на липса на връзка, смени адреса на PostgreSQL \/ --това тук е адреса-->
-		<property name="connection.url">jdbc:postgresql:template1:@192.168.0.15:5432</property>
-		<property name="connection.username">viber2</property>
+		<!-- В случай на липса на връзка, смени базата данни -->
+		<property name="connection.url">jdbc:postgresql://localhost:5432/viber2</property>
+		<property name="connection.username">avy</property>
 		<property name="connection.password">uncommon</property>
 		<property name="connection.driver_class">org.postgresql.Driver</property>
 		<mapping resource="Login.hbm.xml" />

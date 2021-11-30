@@ -1,5 +1,6 @@
 package org.avy.viber2.Login;
 
+import org.avy.viber2.HibernateConnect.HiberConnect;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 //import de.mkammerer.argon2.Argon2Helper;
@@ -7,6 +8,18 @@ import de.mkammerer.argon2.Argon2Factory;
 public class Login {
     // Argon2d хеш алгоритъм; 16 байта сол, 32 байта хеш
     Argon2 Ar = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2d, 16, 32);
+    // Връзка с база данни?
+    HiberConnect Conn = new HiberConnect();
+
+    /**
+     * Автентикира потребителя
+     * 
+     * @return true Успешно валидирани данни, false Невалидни данни
+     */
+    public boolean AuthenticateUser() {
+	Conn.Setup();
+	return false;
+    }
 
     /**
      * Намира оптимален брой итерации.
@@ -48,4 +61,5 @@ public class Login {
 	    Ar.wipeArray(Pass);
 	}
     }
+
 }

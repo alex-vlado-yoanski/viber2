@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD //EN" "https://hibernate.org/dtd/hibernate-mapping.dtd">
+<hibernate-mapping>
+	<class name="org.avy.viber2.Login.User" table="users">
+		<id name="id" type="int" column="id">
+			<!-- правилен клас? -->
+			<generator class="increment"/>
+		</id>
+		<property name="uname" column="name" type="string"></property>
+		<property name="passw" column="password" type="string"></property>
+	</class>
+</hibernate-mapping>
