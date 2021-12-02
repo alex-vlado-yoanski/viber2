@@ -1,7 +1,7 @@
 <?xml version="1.1" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD //EN" "https://hibernate.org/dtd/hibernate-mapping.dtd">
 <hibernate-mapping>
-	<class name="org.avy.viber2.Login.User" table="users">
+	<class name="org.avy.viber2.Database.User" table="users">
 		<id name="id" type="int" column="id">
 			<!-- правилен клас? -->
 			<generator class="increment"/>

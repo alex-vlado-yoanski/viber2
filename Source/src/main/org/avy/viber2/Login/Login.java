@@ -1,6 +1,5 @@
 package org.avy.viber2.Login;
 
-import org.avy.viber2.HibernateConnect.HiberConnect;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 //import de.mkammerer.argon2.Argon2Helper;
@@ -9,7 +8,7 @@ public class Login {
     // Argon2d хеш алгоритъм; 16 байта сол, 32 байта хеш
     Argon2 Ar = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2d, 16, 32);
     // Връзка с база данни?
-    HiberConnect Conn = new HiberConnect();
+    // HiberConnect Conn = new HiberConnect();
 
     /**
      * Автентикира потребителя
@@ -17,7 +16,7 @@ public class Login {
      * @return true Успешно валидирани данни, false Невалидни данни
      */
     public boolean AuthenticateUser() {
-	Conn.Setup();
+	// Conn.Setup();
 	return false;
     }
 
@@ -39,7 +38,7 @@ public class Login {
      */
     public String HashNewPassword(String Pass) {
 	// Хешираме паролата - 24 "врътки", ползваме 64Mb, 2 нишки, подаваме паролата
-	String HashedPass = Ar.hash(24, 65536, 2, Pass.toCharArray());
+	String HashedPass = Ar.hash(24, 65536, 2, Pass);
 	return HashedPass;
     }
 
@@ -48,18 +47,20 @@ public class Login {
      * 
      * @param Hash Хеш за сравнение
      * @param Pass Парола за сравнение
+     * 
+     * @return true при вярна парола, false при грешна парола
      */
-    public void VerifyPass(String Hash, char[] Pass) {
-	// Хешираме паролата - 24 "врътки", ползваме 64Mb, 2 нишки, подаваме паролата
+    public boolean VerifyPass(String Hash, char[] Pass) {
+	boolean IsValid = false;
 	try {
 	    if (Ar.verify(Hash, Pass)) {
-		System.out.println("Hashes match!");
+		IsValid = true;
 	    } else {
-		System.out.println("No hash match!");
+		IsValid = false;
 	    }
 	} finally {
 	    Ar.wipeArray(Pass);
 	}
+	return IsValid;
     }
-
 }

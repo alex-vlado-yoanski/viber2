@@ -1,16 +1,8 @@
-package org.avy.viber2.Login;
+package org.avy.viber2.Database;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class User {
-    @Id
     private int id;
     private String uname, passw;
-
-    public User() {
-    }
 
     public int getId() {
 	return id;
