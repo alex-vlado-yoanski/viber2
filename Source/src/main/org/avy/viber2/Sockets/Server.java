@@ -9,41 +9,79 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+import org.avy.viber2.Logger.Logs;
+
+public class Server extends Logs {
     static private int SERVER_PORT;
     private ServerSocket SSocket; // Сокет за 'слушане' на сървъра
     private DataInputStream IStream;
     private DataOutputStream OStream;
-
     private Socket ClientSocket; // Сокет за 'говорене' с клиента
-    private PrintWriter out; // С това казваме X на клиента
-    private BufferedReader in; // С това разбираме X от клиента
+    private String Input;
 
+    /**
+     * Инициализира сървъра
+     * 
+     * @param Порт на който слушаме 1024 - 49151 Виж RFC 6335
+     */
     public Server(int P) throws Exception {
-	if (P < 0 || P > 65534) {
+	if (P < 1024 || P > 49151) {
+	    LogJ.error("Server tried to start on invalid socket!");
 	    throw new Exception("Port out of range");
 	}
 	SERVER_PORT = P;
     }
 
-    public void StartServer() throws Exception {
-	SSocket = new ServerSocket(SERVER_PORT);
-	ClientSocket = SSocket.accept();
+    /**
+     * Стартриаме сървъра ни тук, задаваме портове и чакаме клиента да ни 'говори'
+     */
+    public void StartServer() {
+	try {
+	    SSocket = new ServerSocket(SERVER_PORT);
+	    ClientSocket = SSocket.accept();
+	    // Казваме че сме стартирали сървъра, след като сме го стартирали ^_^
+	    LogJ.info("Server has started");
+	} catch (IOException e) {
+	    LogJ.error("IOException  " + e.getMessage());
+	    e.printStackTrace();
+	} catch (SecurityException se) {
+	    LogJ.error("SecurityExcepion " + se.getMessage());
+	    se.printStackTrace();
+	}
+    }
+
+    /**
+     * Сървъра слуша за клиентска връзка
+     */
+    public void ServerRecieve() throws IOException {
 	IStream = new DataInputStream(ClientSocket.getInputStream());
+	BufferedReader IReader = new BufferedReader(new InputStreamReader(IStream));
+
+	ClientSocket = SSocket.accept();
+
+	this.Input = IReader.readLine();
+    }
+
+    /**
+     * Сървъра изпраща съобщение към клиента
+     */
+    public void ServerTransmit() throws IOException {
 	OStream = new DataOutputStream(ClientSocket.getOutputStream());
-	// ClientSocket = SSocket.accept();
     }
 
-    public void SendMessage() throws IOException {
-	// За връзка към света
-	PrintWriter out = new PrintWriter(ClientSocket.getOutputStream(), true);
-	// String resp = out.readLine(T);
-    }
-
+    /**
+     * Затваря съръва. Ако е затворен или никога не е бил стартиран, записва
+     * грешката в лог и хвърля изключение
+     */
     public void CloseServer() throws IOException {
-	if (!SSocket.isClosed())
+	if (this.SSocket == null || SSocket.isClosed()) {
+	    LogJ.error("Server attempted to close, but is already closed or has never been started!");
+	    throw new IOException("Server already closed or never started");
+	} else
 	    SSocket.close();
-	else
-	    throw new IOException("Server already closed");
+    }
+
+    public String GetInputBuffer() {
+	return this.Input;
     }
 }

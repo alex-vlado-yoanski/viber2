@@ -7,8 +7,6 @@ import de.mkammerer.argon2.Argon2Factory;
 public class Login {
     // Argon2d хеш алгоритъм; 16 байта сол, 32 байта хеш
     Argon2 Ar = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2d, 16, 32);
-    // Връзка с база данни?
-    // HiberConnect Conn = new HiberConnect();
 
     /**
      * Автентикира потребителя
@@ -33,7 +31,7 @@ public class Login {
     /**
      * Хешира нова парола.
      * 
-     * @param Pass Парола за хеширане
+     * @param Парола за хеширане
      * @return Хеша на паролата.
      */
     public String HashNewPassword(String Pass) {

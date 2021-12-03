@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+	<appenders>
+		<Console name="ToConsole" target="SYSTEM_OUT">
+			<!-- формат [ЧАС:МИНУТА:СЕКУНКДА] [КЛАС] [НИВО] [ЛОГЕР] - [СЪОБЩЕНИЕ] -->
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<File name="ToFile" fileName="logs/viber2.log" immediateFlush="true">
+			<PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+
+	</appenders>
+	<loggers>
+		<root level="debug">
+			<!-- Ниво info+ се печеата в конзола -->
+			<appender-ref ref="ToConsole" level="info" />
+			<!-- Ниво warn+ се печеата в конзола -->
+			<appender-ref ref="ToFile" level="warn" />
+		</root>
+	</loggers>
+</configuration>

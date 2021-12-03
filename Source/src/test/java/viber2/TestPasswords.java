@@ -1,3 +1,7 @@
+/**
+ * Тества дали паролите се генерират и автентикират правилно
+ */
+
 package viber2;
 
 import static org.junit.jupiter.api.Assertions.*;
