@@ -5,19 +5,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
-		<!-- Добавяме Hibernate 5.6.1 -->
+		<!-- Добавяме Hibernate 5.6.2 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.6.0.Final</version>
-		</dependency>
-
-		<!-- Добавяме JDBC -->
-		<dependency>
-			<groupId>io.openliberty.features</groupId>
-			<artifactId>jdbc-4.2</artifactId>
-			<version>21.0.0.12</version>
-			<type>esa</type>
+			<version>5.6.2.Final</version>
 		</dependency>
 
 		<!-- Добавяме PostgreSQL JDBC driver-->
