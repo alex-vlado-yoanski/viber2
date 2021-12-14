@@ -6,7 +6,6 @@ public class ClientHandler extends Server implements Runnable {
 	super(P);
     }
 
-    @Override
     public void run() {
 	super.StartServer();
     }
