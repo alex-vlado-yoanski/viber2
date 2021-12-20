@@ -9,9 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.avy.viber2.Logger.Logs;
-
-public class Server extends Logs {
+public class Server {
     static private int SERVER_PORT;
     private ServerSocket SSocket; // Сокет за 'слушане' на сървъра
     private DataInputStream IStream;
@@ -26,7 +24,7 @@ public class Server extends Logs {
      */
     public Server(int P) throws Exception {
 	if (P < 1024 || P > 49151) {
-	    LogJ.error("Server tried to start on invalid socket!");
+	    System.out.println("Server tried to start on invalid socket!");
 	    throw new Exception("Port out of range");
 	}
 	SERVER_PORT = P;
@@ -40,12 +38,12 @@ public class Server extends Logs {
 	    SSocket = new ServerSocket(SERVER_PORT);
 	    ClientSocket = SSocket.accept();
 	    // Казваме че сме стартирали сървъра, след като сме го стартирали ^_^
-	    LogJ.info("Server has started");
+	    System.out.println("Server has started");
 	} catch (IOException e) {
-	    LogJ.error("IOException  " + e.getMessage());
+	    System.out.println("IOException  " + e.getMessage());
 	    e.printStackTrace();
 	} catch (SecurityException se) {
-	    LogJ.error("SecurityExcepion " + se.getMessage());
+	    System.out.println("SecurityExcepion " + se.getMessage());
 	    se.printStackTrace();
 	}
     }
@@ -75,7 +73,7 @@ public class Server extends Logs {
      */
     public void CloseServer() throws IOException {
 	if (this.SSocket == null || SSocket.isClosed()) {
-	    LogJ.error("Server attempted to close, but is already closed or has never been started!");
+	    System.out.println("Server attempted to close, but is already closed or has never been started!");
 	    throw new IOException("Server already closed or never started");
 	} else
 	    SSocket.close();
