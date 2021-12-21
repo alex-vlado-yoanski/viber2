@@ -1,85 +1,91 @@
 package org.avy.viber2.Sockets;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
-public class Server {
-    static private int SERVER_PORT;
-    private ServerSocket SSocket; // Сокет за 'слушане' на сървъра
-    private DataInputStream IStream;
-    private DataOutputStream OStream;
-    private Socket ClientSocket; // Сокет за 'говорене' с клиента
-    private String Input;
+public class Server extends Thread {
+    private static final int MTU = 1500; // MTU също така размер буфер! LTE->1428 Ethernet->1500-9k 5G->1420
+    private static int SERVER_PORT; // x.x.x.x:Port || example.com:Port
+    private static ServerSocketChannel serverSocketChannel; // Сокета ни
+    private static ByteBuffer buffer;
+    private static SocketChannel socketChannel;
 
     /**
-     * Инициализира сървъра
+     * Конструктор на сървъра
      * 
-     * @param Порт на който слушаме 1024 - 49151 Виж RFC 6335
+     * @param P порт за слушане 1024 - 49151
+     * 
+     * @throws Exception порт извън позволения диапазон
      */
-    public Server(int P) throws Exception {
+    public Server(int P) throws IllegalArgumentException {
 	if (P < 1024 || P > 49151) {
 	    System.out.println("Server tried to start on invalid socket!");
-	    throw new Exception("Port out of range");
+	    throw new IllegalArgumentException("Port out of range");
 	}
 	SERVER_PORT = P;
     }
 
-    /**
-     * Стартриаме сървъра ни тук, задаваме портове и чакаме клиента да ни 'говори'
-     */
-    public void StartServer() {
+    // главна нишка
+    public void run() {
+	System.out.print("Server is up\n\n");
+
+	// Отваряме сокета
 	try {
-	    SSocket = new ServerSocket(SERVER_PORT);
-	    ClientSocket = SSocket.accept();
-	    // Казваме че сме стартирали сървъра, след като сме го стартирали ^_^
-	    System.out.println("Server has started");
+	    serverSocketChannel = ServerSocketChannel.open();
+	    serverSocketChannel.configureBlocking(false);
+	    serverSocketChannel.bind(new InetSocketAddress(SERVER_PORT));
 	} catch (IOException e) {
-	    System.out.println("IOException  " + e.getMessage());
 	    e.printStackTrace();
-	} catch (SecurityException se) {
-	    System.out.println("SecurityExcepion " + se.getMessage());
-	    se.printStackTrace();
+	    return;
+	}
+
+	// Цикъл слушане на сървъра
+	while (true) {
+	    try {
+		Thread.sleep(1); // anti-CPU hog
+		socketChannel = serverSocketChannel.accept(); // non-blocking
+		if (socketChannel != null) {
+		    socketChannel.configureBlocking(false);
+		    buffer = ByteBuffer.allocate(MTU);
+
+		    // Тук говорим с клиента
+		    while (true) {
+			// TODO говори с клиента
+			buffer.clear();
+			int read = socketChannel.read(buffer); // non-blocking
+
+			System.out.print(buffer);
+
+			if (read < 0) {
+			    break;
+			}
+			buffer.flip();
+			socketChannel.write(buffer); // can be non-blocking
+		    }
+		    socketChannel.close();
+		}
+	    } catch (InterruptedException IE) {
+		System.out.println(IE.getMessage());
+		throw new UnsupportedOperationException("Server thread was interrupted but not handled :(\n");
+	    } catch (SocketException SE) {
+		// Оправяме TCP RST като зачистим буфера, не знам дали има странични ефекти,
+		// трябва МНОООГО тестване
+		buffer.clear();
+
+		System.out.println(SE.getMessage());
+	    } catch (Exception e) {
+		e.printStackTrace();
+		return;
+	    }
 	}
     }
 
-    /**
-     * Сървъра слуша за клиентска връзка
-     */
-    public void ServerRecieve() throws IOException {
-	IStream = new DataInputStream(ClientSocket.getInputStream());
-	BufferedReader IReader = new BufferedReader(new InputStreamReader(IStream));
-
-	ClientSocket = SSocket.accept();
-
-	this.Input = IReader.readLine();
-    }
-
-    /**
-     * Сървъра изпраща съобщение към клиента
-     */
-    public void ServerTransmit() throws IOException {
-	OStream = new DataOutputStream(ClientSocket.getOutputStream());
-    }
-
-    /**
-     * Затваря съръва. Ако е затворен или никога не е бил стартиран, записва
-     * грешката в лог и хвърля изключение
-     */
-    public void CloseServer() throws IOException {
-	if (this.SSocket == null || SSocket.isClosed()) {
-	    System.out.println("Server attempted to close, but is already closed or has never been started!");
-	    throw new IOException("Server already closed or never started");
-	} else
-	    SSocket.close();
-    }
-
-    public String GetInputBuffer() {
-	return this.Input;
+    // ЗАДЪЛЖИТЕЛНО при излизане се затваря сокета!!!
+    public void exit() throws IOException {
+	serverSocketChannel.close();
     }
 }
