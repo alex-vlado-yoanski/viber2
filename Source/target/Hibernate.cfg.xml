@@ -4,20 +4,17 @@
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/viber2</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">s@perMario17</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">common</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
 		<property name="hbm2ddl.auto">update </property>
 
-		<mapping class="wdc.application.mapping.User" />
-		<mapping class="wdc.application.mapping.Privilege" />
-		<mapping class="wdc.application.mapping.GrapesSort" />
-		<mapping class="wdc.application.mapping.GrapesCategory" />
-		<mapping class="wdc.application.mapping.Bottle" />
-		<mapping class="wdc.application.mapping.Wine" />
-		<mapping class="wdc.application.mapping.WineSorts" />
-		<mapping class="wdc.application.mapping.WineBottles" />
+		<mapping class="org.avy.viber2.TableManagers.Chats" />
+		<mapping class="org.avy.viber2.TableManagers.Messages" />
+		<mapping class="org.avy.viber2.TableManagers.UserChats" />
+		<mapping class="org.avy.viber2.TableManagers.UserInvitations" />
+		<mapping class="org.avy.viber2.TableManagers.Users" />
 	</session-factory>
 </hibernate-configuration>
