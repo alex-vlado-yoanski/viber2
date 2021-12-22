@@ -1,6 +1,6 @@
 //Тества дали сървърът получава и изпраща правилно съобщения
 
-package viber2;
+package org.avy.viber2.database;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,10 +11,10 @@ import java.net.Socket;
 
 import org.junit.Test;
 
-public class TestServerRxTx {
+public class ServerConnectionTest {
     @Test
     public void TestServerSendRecieve() throws IOException {
-	Socket Sock = new Socket("localhost", 8081);
+	Socket Sock = new Socket("localhost", 8080);
 
 	OutputStream OStream = Sock.getOutputStream();
 	OStream.write("PING".getBytes());

@@ -1,4 +1,4 @@
-package org.avy.viber2.TableManagers;
+package org.avy.viber2.tables.mapping;
 
 import javax.persistence.*;
 

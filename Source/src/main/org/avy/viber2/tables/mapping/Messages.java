@@ -1,6 +1,6 @@
-package org.avy.viber2.TableManagers;
+package org.avy.viber2.tables.mapping;
 
-//import java.sql.Timestamp;
+import java.sql.Timestamp;
 import javax.persistence.*;
 
 @Entity
@@ -18,8 +18,8 @@ public class Messages {
     @Column(name = "file_path", nullable = false)
     private String filePath;
     
-    //@Column(name = "create_date", nullable = false)
-    //private Timestamp createDate;
+    @Column(name = "create_date", nullable = false)
+    private Timestamp createDate;
 
     public int getID() {
 	return ID;

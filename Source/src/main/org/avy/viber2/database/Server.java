@@ -1,4 +1,4 @@
-package org.avy.viber2.DataManagers;
+package org.avy.viber2.database;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

@@ -1,5 +1,12 @@
 package org.avy.viber2;
 
+import java.util.List;
+
+import org.avy.viber2.database.*;
+import org.avy.viber2.tables.mapping.*;
+import org.hibernate.*;
+import javax.persistence.criteria.*;
+
 public class Main {
     public static void main(String[] args) {
 	/*
@@ -35,5 +42,20 @@ public class Main {
 	    e.printStackTrace();
 	}
 	*/
+	
+	
+	Session session = DatabaseConnection.getSessionFactory().openSession();
+	
+	CriteriaBuilder builder = session.getCriteriaBuilder();
+	CriteriaQuery<Users> criteriaQuery = builder.createQuery(Users.class);
+	criteriaQuery.from(Users.class);
+	
+	List<Users> users = session.createQuery(criteriaQuery).getResultList();
+
+	for (Users user : users) {
+	    	System.out.println(user.getID());
+		System.out.println(user.getName());
+		System.out.println(user.getPassword());
+	}
     }
 }

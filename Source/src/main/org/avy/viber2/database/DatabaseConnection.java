@@ -1,4 +1,4 @@
-package org.avy.viber2.Database;
+package org.avy.viber2.database;
 
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
