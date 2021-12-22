@@ -18,11 +18,5 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.3.1</version>
 		</dependency>
-		<!-- Добавяме Argon2i за паролата -->
-		<dependency>
-			<groupId>de.mkammerer</groupId>
-			<artifactId>argon2-jvm</artifactId>
-			<version>2.11</version>
-		</dependency>
 	</dependencies>
 </project>

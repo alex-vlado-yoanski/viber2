@@ -1,4 +1,4 @@
-package org.avy.viber2.Sockets;
+package org.avy.viber2.DataManagers;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 
 public class Server extends Thread {
     private static final int MTU = 1500; // MTU също така размер буфер! LTE->1428 Ethernet->1500-9k 5G->1420
@@ -57,8 +58,8 @@ public class Server extends Thread {
 			// TODO говори с клиента
 			buffer.clear();
 			int read = socketChannel.read(buffer); // non-blocking
-
-			System.out.print(buffer);
+			String s = StandardCharsets.UTF_8.decode(buffer).toString();
+			System.out.print(s);
 
 			if (read < 0) {
 			    break;

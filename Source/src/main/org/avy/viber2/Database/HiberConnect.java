@@ -2,6 +2,7 @@ package org.avy.viber2.Database;
 
 import java.util.List;
 
+import org.avy.viber2.TableManagers.Users;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +11,7 @@ import org.hibernate.query.Query;
 
 //@TODO: нещо смислено от вързката
 public class HiberConnect extends Thread {
-    private static Configuration cfg = new Configuration().addClass(org.avy.viber2.Database.Users.class)
+    private static Configuration cfg = new Configuration().addClass(org.avy.viber2.TableManagers.Users.class)
 	    .setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
 	    .setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/viber2")
 	    .setProperty("connection.username", "avy").setProperty("hibernate.connection.password", "uncommon")

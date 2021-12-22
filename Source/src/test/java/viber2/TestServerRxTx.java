@@ -1,10 +1,8 @@
-/**
- * Тества дали сървърът получава и изпраща правилно съобщения
- */
+//Тества дали сървърът получава и изпраща правилно съобщения
 
 package viber2;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,17 +13,16 @@ import org.junit.Test;
 
 public class TestServerRxTx {
     @Test
-    public void TestPasswordValidity() throws IOException {
+    public void TestServerSendRecieve() throws IOException {
 	Socket Sock = new Socket("localhost", 8081);
 
 	OutputStream OStream = Sock.getOutputStream();
-	OStream.write("Hai server!".getBytes());
+	OStream.write("PING".getBytes());
 
 	InputStream IStream = Sock.getInputStream();
-	byte[] Rx = new byte[11];
+	byte[] Rx = new byte[4];
 	IStream.read(Rx);
 	Sock.close();
-	assertEquals("Hai client!", Rx.toString());
-
+	assertEquals("PONG", Rx.toString());
     }
 }

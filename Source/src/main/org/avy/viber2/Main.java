@@ -2,9 +2,8 @@ package org.avy.viber2;
 
 import java.util.List;
 
+import org.avy.viber2.DataManagers.Server;
 import org.avy.viber2.Database.HiberConnect;
-//import org.avy.viber2.Database.Users;
-import org.avy.viber2.Sockets.Server;
 
 public class Main {
     private static HiberConnect DB;
@@ -56,7 +55,7 @@ public class Main {
 	}
 
 	// Пусни база данни
-	Database(); // TODO В нишка
+	// Database(); // TODO В нишка
 
 	// Чакаме да приключат работа нишките
 	try {
