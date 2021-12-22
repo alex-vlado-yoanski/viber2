@@ -1,40 +1,8 @@
 package org.avy.viber2;
 
-import java.util.List;
-
-import org.avy.viber2.DataManagers.Server;
-import org.avy.viber2.Database.HiberConnect;
-
 public class Main {
-    private static HiberConnect DB;
-
-    private static void Database() {
-	// Users U = new Users();
-
-	DB = new HiberConnect();
-	List<?> L = null;
-	try {
-	    L = DB.SelectItem("U.id", "Users U");
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return;
-	}
-
-	System.out.println(L.toString());
-
-	// U.setId(2);
-	// U.setUname("Nemo");
-	// U.setPassw("blublub");
-	// DB.DeleteItem("users", "name", "Nemo");
-	// DB.CommitAndSaveSession(U);
-	// L = DB.SelectItem("U.id", "Users U");
-	// System.out.println(L.toString());
-
-	DB.exit();
-    }
-
     public static void main(String[] args) {
+	/*
 	Thread Serv = null;
 	// Пусни сървър
 	int port = -1;
@@ -66,5 +34,6 @@ public class Main {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	*/
     }
 }

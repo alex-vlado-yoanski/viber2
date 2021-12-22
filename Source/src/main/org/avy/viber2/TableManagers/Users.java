@@ -1,16 +1,29 @@
 package org.avy.viber2.TableManagers;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class Users {
-    private long id;
+    
+    @Id
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long ID;
+    
+    @Column(name = "name", nullable = false)
     private String name;
+    
+    @Column(name = "password", nullable = false)
     private String password;
 
-    public long getId() {
-	return id;
+
+    public long getID() {
+	return ID;
     }
 
-    public void setId(long id) {
-	this.id = id;
+    public void setID(long ID) {
+	this.ID = ID;
     }
 
     public String getName() {

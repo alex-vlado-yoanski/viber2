@@ -1,22 +1,34 @@
 package org.avy.viber2.TableManagers;
 
-public class Chats {
-    private int id, message_id;
+import javax.persistence.*;
 
-    public int getId() {
-	return id;
+@Entity
+@Table(name = "chats")
+public class Chats {
+    
+    @Id
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_id", foreignKey = @ForeignKey(name = "fk_chats_message_id"))
+    private int messageID;
+
+    public int getID() {
+	return ID;
     }
 
-    public void setId(int id) {
-	this.id = id;
+    public void setID(int ID) {
+	this.ID = ID;
     }
 
     public int getMessage_id() {
-	return message_id;
+	return messageID;
     }
 
-    public void setMessage_id(int message_id) {
-	this.message_id = message_id;
+    public void setMessageID(int messageID) {
+	this.messageID = messageID;
     }
 
     public Chats() {

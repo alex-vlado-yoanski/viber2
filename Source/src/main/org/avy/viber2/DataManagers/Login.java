@@ -1,8 +1,8 @@
 package org.avy.viber2.DataManagers;
 
-import org.avy.viber2.Database.HiberConnect;
+import org.avy.viber2.Database.DatabaseConnection;
 
-public class Login extends HiberConnect {
+public class Login extends DatabaseConnection {
     // private HiberConnect HC;
 
     /**

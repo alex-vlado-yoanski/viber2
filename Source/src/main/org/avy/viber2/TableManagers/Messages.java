@@ -1,18 +1,32 @@
 package org.avy.viber2.TableManagers;
 
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "messages")
 public class Messages {
-    private int id;
-    private String text, file_path;
-    private Timestamp create_date;
+    
+    @Id
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
+    
+    @Column(name = "text", nullable = false)
+    private String text;
+    
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
+    
+    //@Column(name = "create_date", nullable = false)
+    //private Timestamp createDate;
 
-    public int getId() {
-	return id;
+    public int getID() {
+	return ID;
     }
 
-    public void setId(int id) {
-	this.id = id;
+    public void setID(int ID) {
+	this.ID = ID;
     }
 
     public String getText() {
@@ -23,22 +37,22 @@ public class Messages {
 	this.text = text;
     }
 
-    public String getFile_path() {
-	return file_path;
+    public String getFilePath() {
+	return filePath;
     }
 
-    public void setFile_path(String file_path) {
-	this.file_path = file_path;
+    public void setFilePath(String filePath) {
+	this.filePath = filePath;
+    }
+/*
+    public Timestamp getCreateDate() {
+	return createDate;
     }
 
-    public Timestamp getCreate_date() {
-	return create_date;
+    public void setCreateDate(Timestamp createDate) {
+	this.createDate = createDate;
     }
-
-    public void setCreate_date(Timestamp create_date) {
-	this.create_date = create_date;
-    }
-
+*/
     public Messages() {
 
     }
