@@ -22,7 +22,7 @@
 	</dependencies>
 	
 	<build>
-		<finalName>viber2</finalName>
+		<finalName>viber2-FINAL</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
