@@ -43,19 +43,17 @@ public class Main {
 	}
 	*/
 	
-	
+	// Hibernate test -- TO DO: Да се махне след сокетите
 	Session session = DatabaseConnection.getSessionFactory().openSession();
 	
 	CriteriaBuilder builder = session.getCriteriaBuilder();
-	CriteriaQuery<Users> criteriaQuery = builder.createQuery(Users.class);
-	criteriaQuery.from(Users.class);
+	CriteriaQuery<Message> criteriaQuery = builder.createQuery(Message.class);
+	criteriaQuery.from(Message.class);
 	
-	List<Users> users = session.createQuery(criteriaQuery).getResultList();
+	List<Message> tests = session.createQuery(criteriaQuery).getResultList();
 
-	for (Users user : users) {
-	    	System.out.println(user.getID());
-		System.out.println(user.getName());
-		System.out.println(user.getPassword());
+	for (Message test : tests) {
+	    	System.out.println(test.getCreateDate());
 	}
     }
 }

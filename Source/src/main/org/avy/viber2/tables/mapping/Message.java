@@ -5,11 +5,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "messages")
-public class Messages {
+public class Message {
     
     @Id
-    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private int ID;
     
     @Column(name = "text", nullable = false)
@@ -20,13 +20,13 @@ public class Messages {
     
     @Column(name = "create_date", nullable = false)
     private Timestamp createDate;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY) // == fetch when needed
+    @JoinColumn(name = "message_id", foreignKey = @ForeignKey(name = "fk_chats_message_id"))
+    private Chat chat;
+    
     public int getID() {
 	return ID;
-    }
-
-    public void setID(int ID) {
-	this.ID = ID;
     }
 
     public String getText() {
@@ -44,7 +44,7 @@ public class Messages {
     public void setFilePath(String filePath) {
 	this.filePath = filePath;
     }
-/*
+    
     public Timestamp getCreateDate() {
 	return createDate;
     }
@@ -52,8 +52,8 @@ public class Messages {
     public void setCreateDate(Timestamp createDate) {
 	this.createDate = createDate;
     }
-*/
-    public Messages() {
+
+    public Message() {
 
     }
 }

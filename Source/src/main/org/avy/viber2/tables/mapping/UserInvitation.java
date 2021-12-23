@@ -1,8 +1,7 @@
 package org.avy.viber2.tables.mapping;
 
 import javax.persistence.*;
-
-//import org.hibernate.type.DateType;
+import java.sql.Timestamp;
 
 /*
  * STATUSES:
@@ -13,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user_invitations")
-public class UserInvitations {
+public class UserInvitation {
     
     @Id
     @Column(name = "id", insertable = false, updatable = false)
@@ -25,21 +24,17 @@ public class UserInvitations {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", foreignKey = @ForeignKey(name = "fk_user_invitations_sender_id"))
-    private int senderID;
+    private User sender;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_user_invitations_receiver_id"))
-    private int recieverID;
+    private User receiver;
     
-    //@Column(name = "create_date", nullable = false)
-    //private DateType create_date;
+    @Column(name = "create_date", nullable = false)
+    private Timestamp createDate;
 
     public int getID() {
 	return ID;
-    }
-
-    public void setId(int ID) {
-	this.ID = ID;
     }
 
     public int getStatus() {
@@ -50,31 +45,31 @@ public class UserInvitations {
 	this.status = status;
     }
 
-    public int getSenderID() {
-	return senderID;
+    public User getSender() {
+	return sender;
     }
 
-    public void setSenderID(int senderID) {
-	this.senderID = senderID;
+    public void setSender(User sender) {
+	this.sender = sender;
     }
 
-    public int getRecieverID() {
-	return recieverID;
+    public User getReciever() {
+	return receiver;
     }
 
-    public void setRecieverID(int recieverID) {
-	this.recieverID = recieverID;
+    public void setReciever(User receiver) {
+	this.receiver = receiver;
     }
-/*
-    public DateType getCreateDate() {
+
+    public Timestamp getCreateDate() {
 	return createDate;
     }
 
-    public void setCreateDate(DateType createDate) {
+    public void setCreateDate(Timestamp createDate) {
 	this.createDate = createDate;
     }
-*/
-    public UserInvitations() {
+
+    public UserInvitation() {
 
     }
 

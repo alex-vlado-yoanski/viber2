@@ -11,10 +11,9 @@
 		<property name="format_sql">true</property>
 		<property name="hbm2ddl.auto">update </property>
 
-		<mapping class="org.avy.viber2.tables.mapping.Chats" />
-		<mapping class="org.avy.viber2.tables.mapping.Messages" />
-		<mapping class="org.avy.viber2.tables.mapping.UserChats" />
-		<mapping class="org.avy.viber2.tables.mapping.UserInvitations" />
-		<mapping class="org.avy.viber2.tables.mapping.Users" />
+		<mapping class="org.avy.viber2.tables.mapping.Chat" />
+		<mapping class="org.avy.viber2.tables.mapping.Message" />
+		<mapping class="org.avy.viber2.tables.mapping.User" />
+		<mapping class="org.avy.viber2.tables.mapping.UserInvitation" />
 	</session-factory>
 </hibernate-configuration>
