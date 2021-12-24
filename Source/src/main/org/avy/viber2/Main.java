@@ -1,10 +1,14 @@
 package org.avy.viber2;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.avy.viber2.database.*;
 import org.avy.viber2.tables.mapping.*;
 import org.hibernate.*;
+
+import com.google.gson.*;
+
 import javax.persistence.criteria.*;
 
 public class Main {
@@ -55,5 +59,23 @@ public class Main {
 	for (Message test : tests) {
 	    	System.out.println(test.getCreateDate());
 	}
+	
+	// JSON test -- TO DO: Да се махне след сокетите
+	CriteriaBuilder builder2 = session.getCriteriaBuilder();
+	CriteriaQuery<User> criteriaQuery2 = builder.createQuery(User.class);
+	criteriaQuery2.from(User.class);
+	
+	List<User> asd = session.createQuery(criteriaQuery2).getResultList();
+	
+	User u = asd.get(0);
+	
+	// -> от тук
+	Gson gson = new Gson();
+	String json = gson.toJson(u);
+	
+	System.out.println(json);
+	
+	User user2 = gson.fromJson(json, User.class);
+
     }
 }
