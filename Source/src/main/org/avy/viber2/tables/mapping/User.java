@@ -1,13 +1,11 @@
 package org.avy.viber2.tables.mapping;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User
-{
+public class User {
     
     @Id
     @Column(name = "id", insertable = false, updatable = false)
