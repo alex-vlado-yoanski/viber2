@@ -6,7 +6,7 @@
     <reloadable>true</reloadable>
     <redirectLogger>false</redirectLogger>
     <updateXml>true</updateXml>
-    <warLocation></warLocation>
+    <warLocation>D:\Java\viber2\Source\viber2.war</warLocation>
     <extraInfo></extraInfo>
     <mavenClasspath>false</mavenClasspath>
     <webPath></webPath>
