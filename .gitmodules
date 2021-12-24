@@ -1,0 +1,3 @@
+[submodule "Android-chat"]
+	path = Android-chat
+	url = https://github.com/YoanEnchev/Android-chat
