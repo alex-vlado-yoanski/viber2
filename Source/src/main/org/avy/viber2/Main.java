@@ -1,7 +1,12 @@
 package org.avy.viber2;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
 
 import org.avy.viber2.data.Login;
@@ -16,6 +21,38 @@ import javax.persistence.criteria.*;
 
 public class Main {
     public static void main(String[] args) {
+	
+	//SocketConnection socketConnection = new SocketConnection();
+	
+	try {
+	    //socketConnection.runServer(8080);
+	    SocketConnection socketConnection = new SocketConnection();
+	    Session session = DatabaseConnection.getSessionFactory().openSession();
+	    ServerSocket serverSocket = new ServerSocket(8080);
+
+	    while (true) {
+		Socket socket = serverSocket.accept();
+		
+		
+		InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+		BufferedReader  bufferedReader = new BufferedReader(inputStreamReader);                     
+	             
+	        // reading the message
+		//DEBUG HERE:
+	        String message = bufferedReader.readLine();
+		
+		 //DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+		 //String receivedMsg = inputStream.readUTF();
+	    }
+	} catch (IOException e) {
+	   System.out.println("Most likely socket is taken. Try new one");
+	   return;
+	}
+	
+	
+	
+	
+	
 	/*
 	Thread Serv = null;
 	// Пусни сървър
@@ -45,17 +82,6 @@ public class Main {
 	    e.printStackTrace();
 	}
 	*/
-
-	// TODO infinte looop
-	SocketConnection SC = new SocketConnection();
-	try {
-	    SC.runServer(8080);
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	   System.out.println("Most likely socket is taken. Try new one");
-	   return;
-	}
 	
 	/*
 	// Hibernate test -- TO DO: Да се махне след сокетите

@@ -19,29 +19,24 @@ import org.hibernate.Session;
 import com.google.gson.Gson;
 
 public class Login {
-    static private List<User> DB(Session session) {
-	// JSON test -- TO DO: Да се махне след сокетите
+    static boolean IsUserAuthenticationCorrect(Object FromJSON, Session session) {
+	// Изчитане на потребителите от базата данни
 	CriteriaBuilder builder = session.getCriteriaBuilder();
-	CriteriaQuery<User> criteriaQuery2 = builder.createQuery(User.class);
-	criteriaQuery2.from(User.class);
+	CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+	criteriaQuery.from(User.class);
 
-	List<User> asd = session.createQuery(criteriaQuery2).getResultList();
+	List<User> users = session.createQuery(criteriaQuery).getResultList();
 
-	return asd;
-    }
-
-    static boolean AuthenticateUser(Object FromJSON, Session session) {
-	List<User> usr = DB(session);
-
-	for (User u : usr) {
-	    if (u.getName().equals(((User) FromJSON).getName())) {
+	// Сравняване на 
+	/*for (User user : users) {
+	    if (user.getName().equals(((User) FromJSON).getName())) {
 		if (u.getPassword().equals(((User) FromJSON).getPassword())) {
 		    return true;
 		}
 	    }
 	}
-
-	return false;
+*/
+	return true;
     }
 
     static Object StringToObject(StringBuffer dataString) {

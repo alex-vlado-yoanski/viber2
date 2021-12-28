@@ -52,7 +52,6 @@ public class SocketConnection {
 	return dataString;
     }
 
-    // TODO клиента не чете, но се изпраща?
     protected void SendToClient(String data) throws IOException {
 	out = new DataOutputStream(socket.getOutputStream());
 	int length = data.length();
@@ -63,33 +62,30 @@ public class SocketConnection {
     }
 
     public void runServer(int port) throws InterruptedException, IOException {
-	session = DatabaseConnection.getSessionFactory().openSession(); // Първо инициализираме БД
-	serverSocket = new ServerSocket(port); // После слушаме на сокета!
-	System.out.print("Server Started. ");
+	
+	Session session = DatabaseConnection.getSessionFactory().openSession();
+	ServerSocket serverSocket = new ServerSocket(port);
 
 	while (true) {
-	    System.out.println("Waiting for connection ...");
-
-	    socket = serverSocket.accept(); // Слушай за връзка
-	    System.out.println("Got connection from client.");
-
-	    // поток за четене
-	    DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-	    char requestType = inputStream.readChar(); // Псевдо тип заявка
+	    socket = serverSocket.accept();
+	    
+	    DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+	    String receivedMsg = inputStream.readUTF();
+		    
+	    /*char requestType = inputStream.readChar(); // Псевдо тип заявка
 	    int length = inputStream.readInt(); // Дължина данни
 
 	    // TODO други заявки (и методи)
 	    switch (requestType) {
 	    /* Заявка автентикация */
-	    case 'A': {
+	    /*case 'A': {
 		StringBuffer dataString = ServerReadFromClient(length, inputStream);
 		if (dataString != null) {
 		    User user2 = (User) Login.StringToObject(dataString);
 
 		    System.out.println("name: " + user2.getName() + " password: " + user2.getPassword());
 
-		    if (Login.AuthenticateUser(user2, session)) {
+		    if (Login.IsUserAuthenticationCorrect(user2, session)) {
 			System.out.println("AUTH_PERMITTED");
 			Thread.sleep(5); // Изчакай момент
 			SendToClient("AUTH_PERMITTED"); // Автентикация успешна
@@ -103,23 +99,23 @@ public class SocketConnection {
 	    /* Край заявка автентикация */
 
 	    /* Заявка съобщение */
-	    case 'M': {
+	   /* case 'M': {
 		System.out.println("handling messaging");
 	    }
 		break;
 	    /* Край заявка съобщение */
 
 	    /* Заявка приятелство */
-	    case 'F': {
+	    /*case 'F': {
 		System.out.println("handling friendlist");
 	    }
 		break;
 	    /* Край заявка приятелство :( */
 
 	    // Празна или невалидна заявка
-	    default:
+	   /* default:
 		System.out.println("[No or invalid data recieved]");
-	    }
+	    }*/
 	}
     }
 }
