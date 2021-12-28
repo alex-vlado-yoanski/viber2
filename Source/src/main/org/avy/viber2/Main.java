@@ -1,8 +1,11 @@
 package org.avy.viber2;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.avy.viber2.data.Login;
+import org.avy.viber2.data.SocketConnection;
 import org.avy.viber2.database.*;
 import org.avy.viber2.tables.mapping.*;
 import org.hibernate.*;
@@ -29,24 +32,32 @@ public class Main {
 	    Serv.start(); // Стартирай сървъра
 	} catch (Exception e) {
 	    System.out.print("Failed to start server"); // TODO По-разбираема гершка
-
 	    return; // Няма какво повече да се прави
 	}
-
 	// Пусни база данни
 	// Database(); // TODO В нишка
-
 	// Чакаме да приключат работа нишките
 	try {
 	    Serv.join();
-
 	    // database.join()?
 	} catch (InterruptedException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	*/
+
+	// TODO infinte looop
+	SocketConnection SC = new SocketConnection();
+	try {
+	    SC.runServer(8080);
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	   System.out.println("Most likely socket is taken. Try new one");
+	   return;
+	}
 	
+	/*
 	// Hibernate test -- TO DO: Да се махне след сокетите
 	Session session = DatabaseConnection.getSessionFactory().openSession();
 	
@@ -75,7 +86,6 @@ public class Main {
 	
 	System.out.println(json);
 	
-	User user2 = gson.fromJson(json, User.class);
-
+	User user2 = gson.fromJson(json, User.class);*/
     }
 }
