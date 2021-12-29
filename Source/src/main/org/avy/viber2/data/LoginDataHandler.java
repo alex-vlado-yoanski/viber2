@@ -4,7 +4,13 @@ import java.lang.reflect.Type;
 import org.avy.viber2.tables.mapping.*;
 import com.google.gson.*;
 
-public class Login implements JsonSerializer<User>, JsonDeserializer<User>  {
+public class LoginDataHandler implements JsonSerializer<User>, JsonDeserializer<User>  {
+    
+    public User user;
+    
+    public LoginDataHandler() {
+	
+    }
     
     @Override
     public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {

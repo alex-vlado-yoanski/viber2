@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -16,6 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.avy.viber2.data.LoginDataHandler;
 import org.avy.viber2.data.SocketConnection;
 import org.avy.viber2.database.DatabaseConnection;
 import org.avy.viber2.tables.mapping.User;
@@ -40,16 +43,32 @@ public class Main {
 	    while (true) {
 		Socket socket = serverSocket.accept();
 		
+		String content;
 		
-		InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
-		BufferedReader  bufferedReader = new BufferedReader(inputStreamReader);                     
-	             
-	        // reading the message
-		//DEBUG HERE:
-	        String message = bufferedReader.readLine();
+		StringBuilder sb = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+		    String line;
+		    while ( (line = br.readLine()) != null) {
+		        sb.append(line).append(System.lineSeparator());
+		    }
+		    content = sb.toString();
+		    System.out.println(content);
+		}
 		
-		 //DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-		 //String receivedMsg = inputStream.readUTF();
+		Gson gson = new GsonBuilder().registerTypeAdapter(User.class, new LoginDataHandler()).setPrettyPrinting().create();
+		User user = gson.fromJson(content, User.class);
+		
+		///
+		System.out.println("\n\nUser id: " + user.getID() + " name: " + user.getName() + " password: " + user.getPassword());
+		///
+		
+		String json = gson.toJson(user);
+		System.out.println(json);
+		
+		try (OutputStreamWriter out = new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8)) 
+		{ 
+		    out.write(json.toString());
+		}
 	    }
 	} catch (IOException e) {
 	   System.out.println("Most likely socket is taken. Try new one");
