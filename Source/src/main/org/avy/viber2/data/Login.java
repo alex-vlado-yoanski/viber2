@@ -1,29 +1,28 @@
 package org.avy.viber2.data;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
+import org.avy.viber2.tables.mapping.*;
+import com.google.gson.*;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-
-@WebServlet(name = "LoginServlette", urlPatterns = "/login")
-public class Login extends HttpServlet {
-    private static final long serialVersionUID = 4970223239827455229L;
-
+public class Login implements JsonSerializer<User>, JsonDeserializer<User>  {
+    
     @Override
-    public void init() throws ServletException {
-	// Не се ползва
+    public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {
+	JsonObject jsonObject = new JsonObject();
+
+	jsonObject.addProperty("id", user.getID());
+
+	return jsonObject;
     }
 
     @Override
-    public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-	String JsonFromClient = request.getParameter("help_me");
-    }
+    public User deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	JsonObject jsonObject = jsonElement.getAsJsonObject();
 
-    @Override
-    public void destroy() {
-	// Не се ползва
+	User user = new User();
+	user.setName(jsonObject.get("name").getAsString());
+	user.setPassword(jsonObject.get("password").getAsString());
+
+	return user;
     }
 }

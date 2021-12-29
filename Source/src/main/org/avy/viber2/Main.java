@@ -1,22 +1,36 @@
 package org.avy.viber2;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.avy.viber2.data.SocketConnection;
 import org.avy.viber2.database.DatabaseConnection;
 import org.avy.viber2.tables.mapping.User;
-import org.avy.viber2.tables.mapping.UserCredentials;
 import org.hibernate.Session;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Main {
-    public static void main(String[] args) {
+      
+    
+    public static void main(String[] args) throws IOException {	
+	
+	
 	//SocketConnection socketConnection = new SocketConnection();
-	/*
 	try {
 	    //socketConnection.runServer(8080);
 	    SocketConnection socketConnection = new SocketConnection();
@@ -41,7 +55,6 @@ public class Main {
 	   System.out.println("Most likely socket is taken. Try new one");
 	   return;
 	}
-	*/
 	
 	
 	
@@ -78,7 +91,7 @@ public class Main {
 	
 	
 	// Hibernate test -- TO DO: Да се махне след сокетите
-	Session session = DatabaseConnection.getSessionFactory().openSession();
+	//Session session = DatabaseConnection.getSessionFactory().openSession();
 	/*
 	CriteriaBuilder builder = session.getCriteriaBuilder();
 	CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
@@ -91,7 +104,7 @@ public class Main {
 	}
 	*/
 	// JSON test -- TO DO: Да се махне след сокетите
-	CriteriaBuilder builder2 = session.getCriteriaBuilder();
+	/*CriteriaBuilder builder2 = session.getCriteriaBuilder();
 	CriteriaQuery<User> criteriaQuery2 = builder2.createQuery(User.class);
 	criteriaQuery2.from(User.class);
 	
@@ -113,5 +126,9 @@ public class Main {
 	
 	User user2 = gson.fromJson(json, User.class);
 	System.out.println("\n\nUser id: " + user2.getID() + " name: " + user2.getName() + " password: " + user2.getPassword());
+	*/
     }
+
+
+
 }

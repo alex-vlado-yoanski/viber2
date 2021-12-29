@@ -70,7 +70,7 @@ public class UserInvitation {
     }
 
     public UserInvitation() {
-	ID=0;
+	ID = 0;
 	status = 0;
 	createDate = new Timestamp(0);
     }

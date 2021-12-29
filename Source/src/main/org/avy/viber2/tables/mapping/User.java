@@ -1,7 +1,6 @@
 package org.avy.viber2.tables.mapping;
 
 import java.util.List;
-
 import javax.persistence.*;
 
 @Entity
