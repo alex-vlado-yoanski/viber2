@@ -14,10 +14,10 @@ public class Chat {
     
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
-    
+
     @ManyToMany(mappedBy = "chats")
     List<User> users;
-    
+
     public int getID() {
 	return ID;
     }
@@ -27,6 +27,6 @@ public class Chat {
     }
 
     public Chat() {
-
+	this.ID = 0;
     }
 }

@@ -1,29 +1,22 @@
 package org.avy.viber2;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.List;
 
-import org.avy.viber2.data.Login;
-import org.avy.viber2.data.SocketConnection;
-import org.avy.viber2.database.*;
-import org.avy.viber2.tables.mapping.*;
-import org.hibernate.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
-import com.google.gson.*;
+import org.avy.viber2.database.DatabaseConnection;
+import org.avy.viber2.tables.mapping.User;
+import org.avy.viber2.tables.mapping.UserCredentials;
+import org.hibernate.Session;
 
-import javax.persistence.criteria.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Main {
     public static void main(String[] args) {
-	
 	//SocketConnection socketConnection = new SocketConnection();
-	
+	/*
 	try {
 	    //socketConnection.runServer(8080);
 	    SocketConnection socketConnection = new SocketConnection();
@@ -48,7 +41,7 @@ public class Main {
 	   System.out.println("Most likely socket is taken. Try new one");
 	   return;
 	}
-	
+	*/
 	
 	
 	
@@ -83,35 +76,42 @@ public class Main {
 	}
 	*/
 	
-	/*
+	
 	// Hibernate test -- TO DO: Да се махне след сокетите
 	Session session = DatabaseConnection.getSessionFactory().openSession();
-	
+	/*
 	CriteriaBuilder builder = session.getCriteriaBuilder();
-	CriteriaQuery<Message> criteriaQuery = builder.createQuery(Message.class);
-	criteriaQuery.from(Message.class);
+	CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+	criteriaQuery.from(User.class);
 	
-	List<Message> tests = session.createQuery(criteriaQuery).getResultList();
+	List<User> tests = session.createQuery(criteriaQuery).getResultList();
 
-	for (Message test : tests) {
-	    	System.out.println(test.getCreateDate());
+	for (User test : tests) {
+	    	System.out.println(test.getID() + " " + test.getName() + " " + test.getPassword());
 	}
-	
+	*/
 	// JSON test -- TO DO: Да се махне след сокетите
 	CriteriaBuilder builder2 = session.getCriteriaBuilder();
-	CriteriaQuery<User> criteriaQuery2 = builder.createQuery(User.class);
+	CriteriaQuery<User> criteriaQuery2 = builder2.createQuery(User.class);
 	criteriaQuery2.from(User.class);
 	
 	List<User> asd = session.createQuery(criteriaQuery2).getResultList();
+	User u;
+	try {
+	      u = asd.get(1);
+	} catch (IndexOutOfBoundsException e) {
+	   System.out.println("Index out of bounds!!!");
+	   return;
+	}
 	
-	User u = asd.get(0);
+	System.out.println(u.getID() + " " + u.getName() + " " + u.getPassword());
 	
 	// -> от тук
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().registerTypeAdapter(User.class, new UserCredentials()).setPrettyPrinting().create();
 	String json = gson.toJson(u);
-	
 	System.out.println(json);
 	
-	User user2 = gson.fromJson(json, User.class);*/
+	User user2 = gson.fromJson(json, User.class);
+	System.out.println("\n\nUser id: " + user2.getID() + " name: " + user2.getName() + " password: " + user2.getPassword());
     }
 }

@@ -38,8 +38,10 @@ CREATE TABLE messages(
     text     		VARCHAR(256) NOT NULL,
 	file_path		VARCHAR(260) NOT NULL,
 	create_date		TIMESTAMP NOT NULL,
+	sent_by			INT NOT NULL,
 	
-	CONSTRAINT pk_messages PRIMARY KEY(id)
+	CONSTRAINT pk_messages PRIMARY KEY(id),
+	CONSTRAINT fk_messages_sent_by FOREIGN KEY(sent_by) REFERENCES users(id)
 );
 
 -- Създаваме на таблица 'chats'
