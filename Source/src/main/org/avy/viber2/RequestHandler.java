@@ -41,7 +41,8 @@ public class RequestHandler extends Thread {
 	    System.out.println("Returning response...");
 	    PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
 	    outputStream.print(response);
-
+	    outputStream.flush();
+	    
 	    // Затваряне на връзката
 	    System.out.println("Closing response...");
 	    inputStream.close();
