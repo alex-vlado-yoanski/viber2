@@ -4,9 +4,34 @@ import java.lang.reflect.Type;
 import org.avy.viber2.tables.mapping.*;
 import com.google.gson.*;
 
-public class LoginDataHandler implements JsonSerializer<User>, JsonDeserializer<User> {
+public class LoginDataHandler implements IDataHandler<User> {
+    
     public LoginDataHandler() {
 	
+    }
+    
+    @Override
+    public String process(String request) {
+	String response = null;
+	
+	// Подготвяне на json обект
+	GsonBuilder gsonBuilder = new GsonBuilder();
+	gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
+	gsonBuilder.setPrettyPrinting();
+	
+	// Създаване на json обект
+	Gson json = gsonBuilder.create();
+	
+	// Изчитане на заявката
+	User user = json.fromJson(request, User.class);
+	
+	// Обработване на заявката
+	
+	
+	// Подготвяне на отговор
+	response = json.toJson(user);
+	
+	return response;
     }
     
     @Override
@@ -28,4 +53,5 @@ public class LoginDataHandler implements JsonSerializer<User>, JsonDeserializer<
 
 	return user;
     }
+    
 }

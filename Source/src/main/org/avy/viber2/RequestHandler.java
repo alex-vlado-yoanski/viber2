@@ -3,13 +3,20 @@ package org.avy.viber2;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-
 import org.avy.viber2.data.*;
-import org.avy.viber2.tables.mapping.User;
 
-import com.google.gson.*;
+/**
+* Как се добавя нов тип заявка:
+* 1. Дефиниране на номера на заявката в началото на класа
+* 2. Разписване на handler наследник на IDataHandler<YOUR_CLASS>
+* 3. Добавяне на новия handler в process(...)
+*/
 
 public class RequestHandler extends Thread {
+    // Видове заявки, които очакваме
+    private static final int LOGIN_CREDENTIALS = 1;
+    // дефиниране на номера на следващата заявка, която очакваме тук ^
+    
     private static final int messageLength = 1500;
     private Socket socket;
 
@@ -57,17 +64,47 @@ public class RequestHandler extends Thread {
 	String response = null;
 
 	try {
-	    //Gson gson = new GsonBuilder().registerTypeAdapter(User.class, new LoginDataHandler()).setPrettyPrinting().create();
-	    //User user = gson.fromJson(request, User.class);
-	    //response = gson.toJson(user);
+	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
+	    // Ако няма тип връщаме грешка 400
+	    int requestType = 0;
 	    
-	    response = "test44";
+	    // TO DO ZA VLADO
+	    
+	    switch(requestType) {
+	    	case LOGIN_CREDENTIALS:{
+	    	    LoginDataHandler login = new LoginDataHandler();
+	    	    login.process(request);
+	    	    break;
+	    	}
+	    	// следващият вид заявка да се разписва тук ^
+	    	default:{
+	    	    response = createErrorResponse(470);
+	    	    break;	    	    
+	    	}
+	    }
 	} catch (Exception e) {
+	    response = createErrorResponse(400);
 	    System.out.println("Processing request failed.");
 	    e.printStackTrace();
 	}
 
 	return response;
     }
-
+    
+    public String createErrorResponse(int errorCode) {
+	String errorMessage = "Bad request."; // errorCode : 400
+	
+	// Формиране на описание на грешката според кода на грешка
+	switch(errorCode) {
+	    case 471: {
+		errorMessage += " Invalid request type.";
+		break;
+	    }
+	}
+	
+	// Формиране на отговора за грешка
+	String response = "{\"errorCode\" : \"" + errorCode + "\", \"errorMessage\" : \"" + errorMessage + "\"}";
+	
+	return response;
+    }
 }
