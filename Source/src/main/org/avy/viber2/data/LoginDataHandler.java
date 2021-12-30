@@ -1,7 +1,18 @@
 package org.avy.viber2.data;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.avy.viber2.database.DatabaseConnection;
 import org.avy.viber2.tables.mapping.*;
+import org.hibernate.Session;
+
+
 import com.google.gson.*;
 
 public class LoginDataHandler implements IDataHandler<User> {
@@ -12,24 +23,48 @@ public class LoginDataHandler implements IDataHandler<User> {
     
     @Override
     public String process(String request) {
+	
 	String response = null;
 	
-	// Подготвяне на json обект
-	GsonBuilder gsonBuilder = new GsonBuilder();
-	gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
-	gsonBuilder.setPrettyPrinting();
-	
-	// Създаване на json обект
-	Gson json = gsonBuilder.create();
-	
-	// Изчитане на заявката
-	User user = json.fromJson(request, User.class);
-	
-	// Обработване на заявката
-	
-	
-	// Подготвяне на отговор
-	response = json.toJson(user);
+	try {
+	    // Подготвяне на json обект
+	    GsonBuilder gsonBuilder = new GsonBuilder();
+    	    gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
+    	    gsonBuilder.setPrettyPrinting();
+    	
+    	    // Създаване на json обект
+    	    Gson json = gsonBuilder.create();
+    	
+    	    // Изчитане на заявката
+    	    User userCredentials = json.fromJson(request, User.class);
+    	
+    	    // Обработване на заявката
+    	    Session session = DatabaseConnection.getSessionFactory().openSession();
+    	
+    	    CriteriaBuilder builder = session.getCriteriaBuilder();
+    	    CriteriaQuery<User> query = builder.createQuery(User.class);
+    	    Root<User> root = query.from(User.class);
+    
+    	    List<Predicate> predicates = new ArrayList<Predicate>();
+    	    predicates.add(builder.equal(root.get("name"), userCredentials.getName()));
+    	    predicates.add(builder.equal(root.get("password"), userCredentials.getPassword()));
+    	
+    	    query.select(root).where(predicates.toArray(new Predicate[] {}));
+    	
+    	    // Изпълняване на заявката към базата данни
+    	    List<User> users = session.createQuery(query).getResultList();
+    	    
+    	    // Подготвяне на отговор
+    	    User user = new User();
+    	    
+    	    if (users.size() != 0) // Има намерен запис
+    		user = users.get(0);    	    
+    	   
+    	    response = json.toJson(user);
+    	    
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
 	
 	return response;
     }

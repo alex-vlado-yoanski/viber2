@@ -5,12 +5,10 @@ import java.net.*;
 
 public class Server extends Thread {
     private int portNumber;
-    private int timeout;
     private ServerSocket serverSocket;
     
-    public Server(int portNumber, int timeout){
+    public Server(int portNumber){
 	this.portNumber = portNumber;
-	this.timeout = timeout;
     }
     
     @Override
@@ -22,8 +20,6 @@ public class Server extends Thread {
      	    	
      	    	Socket socket = serverSocket.accept();
      	    	System.out.println("Connection established.");
-
-     	    	socket.setSoTimeout(timeout);
      	    	
                 RequestHandler requestHandler = new RequestHandler(socket);
                 requestHandler.start();

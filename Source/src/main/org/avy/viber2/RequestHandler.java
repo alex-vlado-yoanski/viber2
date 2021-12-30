@@ -5,6 +5,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import org.avy.viber2.data.*;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 /**
 * Как се добавя нов тип заявка:
 * 1. Дефиниране на номера на заявката в началото на класа
@@ -28,6 +31,7 @@ public class RequestHandler extends Thread {
     @Override
     public void run() {
 	try {
+	    
 	    // Прочитане на заявката
 	    System.out.println("Reading request...");
 	    byte[] inputMessage = new byte[messageLength];
@@ -51,11 +55,8 @@ public class RequestHandler extends Thread {
 	    outputStream.print(response);
 	    outputStream.flush();
 	    
-	    // Затваряне на връзката
-	    System.out.println("Closing response...");
-	    inputStream.close();
-	    outputStream.close();
-	    socket.close();
+	    // Не затваряме връзката, клиентът ще я затвори
+	    
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -65,16 +66,21 @@ public class RequestHandler extends Thread {
 	String response = null;
 
 	try {
+	    
+	    // client test only
+	    // request = "{\"requestType\" : \"1\",\"name\": \"SA\",\"password\": \"common\"}";
+	    
 	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
 	    // Ако няма тип връщаме грешка 400
 	    int requestType = 0;
 	    
-	    // TO DO ZA VLADO
+	    JsonObject job = new Gson().fromJson(request, JsonObject.class);
+	    requestType = job.get("requestType").getAsInt();
 	    
 	    switch(requestType) {
 	    	case LOGIN_CREDENTIALS:{
 	    	    LoginDataHandler login = new LoginDataHandler();
-	    	    login.process(request);
+	    	    response = login.process(request);
 	    	    break;
 	    	}
 	    	// следващият вид заявка да се разписва тук ^
@@ -83,6 +89,7 @@ public class RequestHandler extends Thread {
 	    	    break;	    	    
 	    	}
 	    }
+	    
 	} catch (Exception e) {
 	    response = createErrorResponse(400);
 	    System.out.println("Processing request failed.");
@@ -97,7 +104,7 @@ public class RequestHandler extends Thread {
 	
 	// Формиране на описание на грешката според кода на грешка
 	switch(errorCode) {
-	    case 471: {
+	    case 470: {
 		errorMessage += " Invalid request type.";
 		break;
 	    }
