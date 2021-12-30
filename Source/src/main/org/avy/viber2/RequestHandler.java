@@ -13,6 +13,7 @@ import org.avy.viber2.data.*;
 */
 
 public class RequestHandler extends Thread {
+    
     // Видове заявки, които очакваме
     private static final int LOGIN_CREDENTIALS = 1;
     // дефиниране на номера на следващата заявка, която очакваме тук ^
@@ -107,4 +108,5 @@ public class RequestHandler extends Thread {
 	
 	return response;
     }
+    
 }

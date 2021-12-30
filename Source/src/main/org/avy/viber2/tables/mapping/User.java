@@ -2,10 +2,11 @@ package org.avy.viber2.tables.mapping;
 
 import java.util.*;
 import javax.persistence.*;
+import org.avy.viber2.data.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AdditionalRequestData {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
