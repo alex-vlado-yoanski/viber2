@@ -21,11 +21,4 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>net.sf.eclipse.tomcat.tomcatnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>RequestHandler.java</name>
-			<type>1</type>
-			<location>D:/Downloads/RequestHandler.java</location>
-		</link>
-	</linkedResources>
 </projectDescription>
