@@ -1,11 +1,11 @@
 
 -- Подготовка за изпълнение
 
-DROP TABLE IF EXISTS user_chats;
-DROP TABLE IF EXISTS chats;
-DROP TABLE IF EXISTS messages;
-DROP TABLE IF EXISTS user_invitations;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user_chats CASCADE;
+DROP TABLE IF EXISTS chats CASCADE;
+DROP TABLE IF EXISTS messages CASCADE;
+DROP TABLE IF EXISTS user_invitations CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -- Създаваме на таблица 'users'
 
