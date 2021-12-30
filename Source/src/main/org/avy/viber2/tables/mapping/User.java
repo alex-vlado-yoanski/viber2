@@ -1,6 +1,6 @@
 package org.avy.viber2.tables.mapping;
 
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
@@ -64,6 +64,9 @@ public class User {
     }
 
     public User() {
-	ID = 0;
+	this.ID = 0;
+	this.name = null;
+	this.password = null;
+	this.sendInvitations = new ArrayList<UserInvitation>();
     }
 }

@@ -59,7 +59,11 @@ public class Message {
     }
 
     public Message() {
-	ID = 0;
-	createDate = new Timestamp(0);
+	this.ID = 0;
+	this.text = null;
+	this.filePath = null;
+	this.createDate = new Timestamp(0);
+	this.chat = new Chat();
+	this.sentBy = new User();
     }
 }

@@ -1,6 +1,6 @@
 package org.avy.viber2.tables.mapping;
 
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
@@ -28,5 +28,7 @@ public class Chat {
 
     public Chat() {
 	this.ID = 0;
+	this.messages = new ArrayList<Message>();
+	this.users = new ArrayList<User>();
     }
 }

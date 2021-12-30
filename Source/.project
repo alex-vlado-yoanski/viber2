@@ -21,11 +21,4 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>net.sf.eclipse.tomcat.tomcatnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>login.java</name>
-			<type>1</type>
-			<location>F:/ARAZ/Documents/TU-Varna - бакалавър/6 СEМЕСТЪР/ПТИ/test/src/main/java/test/login.java</location>
-		</link>
-	</linkedResources>
 </projectDescription>

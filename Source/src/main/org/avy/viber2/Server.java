@@ -1,51 +1,48 @@
 package org.avy.viber2;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.net.*;
 
-public class Server {
-
-    private ArrayList<ConnectionToClient> clientList;
-    private LinkedBlockingQueue<Object> messages;
+public class Server extends Thread {
+    private int portNumber;
+    private int timeout;
     private ServerSocket serverSocket;
+    
+    public Server(int portNumber, int timeout){
+	this.portNumber = portNumber;
+	this.timeout = timeout;
+    }
+    
+    @Override
+    public void run() {
+	System.out.println("Server started.");
+	while(true) {
+	    try {
+        	System.out.println("Waiting for connection...");
+     	    	
+     	    	Socket socket = serverSocket.accept();
+     	    	System.out.println("Connection established.");
 
-    public Server(int port) throws IOException {
-        clientList = new ArrayList<ConnectionToClient>();
-        messages = new LinkedBlockingQueue<Object>();
-        serverSocket = new ServerSocket(port);
-
-        Thread accept = new Thread() {
-            public void run(){
-                while(true){
-                    try{
-                        Socket s = serverSocket.accept();
-                        clientList.add(new ConnectionToClient(s));
-                    }
-                    catch(IOException e){ e.printStackTrace(); }
-                }
+     	    	socket.setSoTimeout(timeout);
+     	    	
+                RequestHandler requestHandler = new RequestHandler(socket);
+                requestHandler.start();
+            } catch (IOException e) {
+        	System.out.println("Establishing connection failed...");
+                e.printStackTrace();
             }
-        };
-
-        accept.setDaemon(true);
-        accept.start();
-
-        Thread messageHandling = new Thread() {
-            public void run(){
-                while(true){
-                    try{
-                        Object message = messages.take();
-                        // Do some handling here...
-                        System.out.println("Message Received: " + message);
-                    }
-                    catch(InterruptedException e){ }
-                }
-            }
-        };
-
-        messageHandling.setDaemon(true);
-        messageHandling.start();
+        }
+    }
+    
+    public void start() {
+	try {
+	    System.out.println("Server starting...");
+	    serverSocket = new ServerSocket(portNumber);
+	    
+	    this.run();
+	} catch(IOException e) {
+	    System.out.println("Starting server failed... Port number may be busy.");
+	    e.printStackTrace();
+	}	
     }
 }

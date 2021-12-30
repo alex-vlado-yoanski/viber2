@@ -70,9 +70,11 @@ public class UserInvitation {
     }
 
     public UserInvitation() {
-	ID = 0;
-	status = 0;
-	createDate = new Timestamp(0);
+	this.ID = 0;
+	this.status = 0;
+	this.sender = new User();
+	this.receiver = new User();
+	this.createDate = new Timestamp(0);
     }
 
 }
