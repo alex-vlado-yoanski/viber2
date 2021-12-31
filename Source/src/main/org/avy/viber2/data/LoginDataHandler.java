@@ -72,8 +72,9 @@ public class LoginDataHandler implements IDataHandler<User> {
        		User proccesedUser = new User();
        	    
        		if (users.size() != 0) // Има намерен запис
-       		    proccesedUser = users.get(0);    	    
-       	   
+       		    proccesedUser = users.get(0);
+
+       		proccesedUser.setRequestType(user.getRequestType());
        		response = json.toJson(proccesedUser);
        		
        	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
@@ -83,7 +84,7 @@ public class LoginDataHandler implements IDataHandler<User> {
    		session.save(user); // връща генерираното ID
    		session.getTransaction().commit();
        	    
-       		// Подготвяне на отговор    
+       		// Подготвяне на отговор
        		response = json.toJson(user);
        		
        	    } // if
