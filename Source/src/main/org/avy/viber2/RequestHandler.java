@@ -81,9 +81,8 @@ public class RequestHandler extends Thread {
 	String response = null;
 
 	try {
-	    
 	    // client test only
-	    //request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
+	    request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
 	    
 	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
 	    // Ако няма тип връщаме грешка 400
@@ -101,33 +100,16 @@ public class RequestHandler extends Thread {
 	    	}
 	    	// следващият вид заявка да се разписва тук ^
 	    	default:{
-	    	    response = createErrorResponse(470);
+	    	    response = ResponseType.createErrorResponse(470);
 	    	    break;	    	    
 	    	}
 	    } // switch
 	} catch (Exception e) {
-	    response = createErrorResponse(400);
+	    response = ResponseType.createErrorResponse(400);
 	    System.out.println("Processing request failed.");
 	    e.printStackTrace();
 	}
 
-	return response;
-    }
-    
-    public String createErrorResponse(int errorCode) {
-	String errorMessage = "Bad request."; // errorCode : 400
-	
-	// Формиране на описание на грешката според кода на грешка
-	switch(errorCode) {
-	    case 470: {
-		errorMessage += " Invalid request type.";
-		break;
-	    }
-	}
-	
-	// Формиране на отговора за грешка
-	String response = "{\"errorCode\" : \"" + errorCode + "\", \"errorMessage\" : \"" + errorMessage + "\"}";
-	
 	return response;
     }
     
