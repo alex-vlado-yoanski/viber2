@@ -88,6 +88,7 @@ public class LoginDataHandler implements IDataHandler<User> {
     public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {
 	JsonObject jsonObject = new JsonObject();
 
+	jsonObject.addProperty("requestType", user.getRequestType());
 	jsonObject.addProperty("id", user.getID());
 
 	return jsonObject;
