@@ -16,8 +16,9 @@ import com.google.gson.JsonObject;
 */
 
 public class RequestHandler extends Thread {
+    private static final int MESSAGE_LENGTH = 1500;
+    private static final int READ_FAILED = -1;
     
-    private static final int messageLength = 1500;
     private Socket socket;
 
     public RequestHandler(Socket socket) {
@@ -26,17 +27,38 @@ public class RequestHandler extends Thread {
 
     @Override
     public void run() {
+	while(!socket.isClosed()) { // слушаме докато връзката е отворена
+	    handle();
+	}
+    }
+
+    private void handle() {
 	try {
-	    
 	    // Прочитане на заявката
-	    System.out.println("Reading request...");
-	    byte[] inputMessage = new byte[messageLength];
+	    byte[] inputMessage = new byte[MESSAGE_LENGTH];
 	    
 	    DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-	    inputStream.read(inputMessage, 0, messageLength);
+	    int readResult = inputStream.read(inputMessage, 0, MESSAGE_LENGTH);
+	    
+	    // Проверяваме дали клиентът не е затвори връзката
+	    if (readResult == READ_FAILED) { 
+		System.out.println("Closing connection...");
+		
+		// TO DO
+		
+		socket.close();
+		System.out.println("Connection closed");
+		return;
+	    }
 	    
 	    String request = new String(inputMessage, StandardCharsets.UTF_8);
 	    request = request.trim(); // за всеки случай
+	    
+	    // Ако няма заявка продължаваме да слушаме
+	    if (request.isEmpty())
+		return;
+	    
+	    System.out.println("Reading request...");
 	    System.out.println(request);
 
 	    // Обработка на заявката
@@ -50,14 +72,11 @@ public class RequestHandler extends Thread {
 	    PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
 	    outputStream.print(response);
 	    outputStream.flush();
-	    
-	    // Не затваряме връзката, клиентът ще я затвори
-	    
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
     }
-
+    
     private String process(String request) {
 	String response = null;
 
@@ -85,8 +104,7 @@ public class RequestHandler extends Thread {
 	    	    response = createErrorResponse(470);
 	    	    break;	    	    
 	    	}
-	    }
-	    
+	    } // switch
 	} catch (Exception e) {
 	    response = createErrorResponse(400);
 	    System.out.println("Processing request failed.");

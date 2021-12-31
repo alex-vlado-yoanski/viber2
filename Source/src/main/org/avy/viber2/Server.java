@@ -12,21 +12,9 @@ public class Server extends Thread {
     }
     
     @Override
-    public void run() {
-	System.out.println("Server started.");
-	while(true) {
-	    try {
-        	System.out.println("Waiting for connection...");
-     	    	
-     	    	Socket socket = serverSocket.accept();
-     	    	System.out.println("Connection established.");
-     	    	
-                RequestHandler requestHandler = new RequestHandler(socket);
-                requestHandler.start();
-            } catch (IOException e) {
-        	System.out.println("Establishing connection failed...");
-                e.printStackTrace();
-            }
+    public void run() {	
+	while(!serverSocket.isClosed()) { // слушаме докато порта не се затвори
+	    process();
         }
     }
     
@@ -34,11 +22,29 @@ public class Server extends Thread {
 	try {
 	    System.out.println("Server starting...");
 	    serverSocket = new ServerSocket(portNumber);
+	    System.out.println("Server started.");
 	    
-	    this.run();
+	    this.run(); // пускаме на текуща нишка
+	    
+	    System.out.println("Server stoped.");
 	} catch(IOException e) {
 	    System.out.println("Starting server failed... Port number may be busy.");
 	    e.printStackTrace();
 	}	
     }
+    
+    private void process() {
+	try {
+    	    System.out.println("Waiting for connection...");
+ 	    Socket socket = serverSocket.accept();
+ 	    System.out.println("Connection established.");
+ 	    	
+ 	    RequestHandler requestHandler = new RequestHandler(socket);
+ 	    requestHandler.start(); // пускаме на нова нишка
+        } catch (IOException e) {
+    	    System.out.println("Establishing connection failed...");
+            e.printStackTrace();
+        }
+    }
+    
 }

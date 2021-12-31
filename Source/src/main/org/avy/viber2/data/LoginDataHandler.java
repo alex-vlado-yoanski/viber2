@@ -23,11 +23,9 @@ public class LoginDataHandler implements IDataHandler<User> {
     
     @Override
     public String process(String request) {
-	
 	String response = null;
 	
 	try {
-	    
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
     	    gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
@@ -75,8 +73,7 @@ public class LoginDataHandler implements IDataHandler<User> {
     		// Подготвяне на отговор    
     		response = json.toJson(user);
     		
-    	    }
-    	    
+    	    } // if
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
