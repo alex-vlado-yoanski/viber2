@@ -10,16 +10,12 @@ import com.google.gson.JsonObject;
 
 /**
 * Как се добавя нов тип заявка:
-* 1. Дефиниране на номера на заявката в началото на класа
+* 1. Дефиниране на номера на заявката в data/RequestType.java
 * 2. Разписване на handler наследник на IDataHandler<YOUR_CLASS>
 * 3. Добавяне на новия handler в process(...)
 */
 
 public class RequestHandler extends Thread {
-    
-    // Видове заявки, които очакваме
-    private static final int LOGIN_CREDENTIALS = 1;
-    // дефиниране на номера на следващата заявка, която очакваме тук ^
     
     private static final int messageLength = 1500;
     private Socket socket;
@@ -68,7 +64,7 @@ public class RequestHandler extends Thread {
 	try {
 	    
 	    // client test only
-	    // request = "{\"requestType\" : \"1\",\"name\": \"SA\",\"password\": \"common\"}";
+	    //request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
 	    
 	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
 	    // Ако няма тип връщаме грешка 400
@@ -78,7 +74,8 @@ public class RequestHandler extends Thread {
 	    requestType = job.get("requestType").getAsInt();
 	    
 	    switch(requestType) {
-	    	case LOGIN_CREDENTIALS:{
+	    	case RequestType.LOGIN_CREDENTIALS: 
+	    	case RequestType.SIGN_IN: {
 	    	    LoginDataHandler login = new LoginDataHandler();
 	    	    response = login.process(request);
 	    	    break;

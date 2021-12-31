@@ -6,7 +6,11 @@ public class AdditionalRequestData {
     private int requestType;
 
     public int getRequestType() {
-	return requestType;
+	return this.requestType;
+    }
+    
+    public void setRequestType(int requestType) {
+	this.requestType = requestType;
     }
     
 }

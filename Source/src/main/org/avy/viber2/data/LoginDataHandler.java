@@ -27,6 +27,7 @@ public class LoginDataHandler implements IDataHandler<User> {
 	String response = null;
 	
 	try {
+	    
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
     	    gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
@@ -36,31 +37,45 @@ public class LoginDataHandler implements IDataHandler<User> {
     	    Gson json = gsonBuilder.create();
     	
     	    // Изчитане на заявката
-    	    User userCredentials = json.fromJson(request, User.class);
+    	    User user = json.fromJson(request, User.class);
     	
     	    // Обработване на заявката
     	    Session session = DatabaseConnection.getSessionFactory().openSession();
     	
-    	    CriteriaBuilder builder = session.getCriteriaBuilder();
-    	    CriteriaQuery<User> query = builder.createQuery(User.class);
-    	    Root<User> root = query.from(User.class);
+    	    if (user.getRequestType() == RequestType.LOGIN_CREDENTIALS) {
+    		
+    		CriteriaBuilder builder = session.getCriteriaBuilder();
+    		CriteriaQuery<User> query = builder.createQuery(User.class);
+    		Root<User> root = query.from(User.class);
     
-    	    List<Predicate> predicates = new ArrayList<Predicate>();
-    	    predicates.add(builder.equal(root.get("name"), userCredentials.getName()));
-    	    predicates.add(builder.equal(root.get("password"), userCredentials.getPassword()));
+    		List<Predicate> predicates = new ArrayList<Predicate>();
+    		predicates.add(builder.equal(root.get("name"), user.getName()));
+    		predicates.add(builder.equal(root.get("password"), user.getPassword()));
     	
-    	    query.select(root).where(predicates.toArray(new Predicate[] {}));
+    		query.select(root).where(predicates.toArray(new Predicate[] {}));
     	
-    	    // Изпълняване на заявката към базата данни
-    	    List<User> users = session.createQuery(query).getResultList();
+    		// Изпълняване на заявката към базата данни
+    		List<User> users = session.createQuery(query).getResultList();
     	    
-    	    // Подготвяне на отговор
-    	    User user = new User();
+    		// Подготвяне на отговор
+    		User proccesedUser = new User();
     	    
-    	    if (users.size() != 0) // Има намерен запис
-    		user = users.get(0);    	    
+    		if (users.size() != 0) // Има намерен запис
+    		    user = users.get(0);    	    
     	   
-    	    response = json.toJson(user);
+    		response = json.toJson(proccesedUser);
+    		
+    	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
+    		
+    		// Записване на потребителя в базата данни
+		session.beginTransaction();
+		session.save(user); // връща генерираното ID
+		session.getTransaction().commit();
+    	    
+    		// Подготвяне на отговор    
+    		response = json.toJson(user);
+    		
+    	    }
     	    
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -83,6 +98,7 @@ public class LoginDataHandler implements IDataHandler<User> {
 	JsonObject jsonObject = jsonElement.getAsJsonObject();
 
 	User user = new User();
+	user.setRequestType(jsonObject.get("requestType").getAsInt());
 	user.setName(jsonObject.get("name").getAsString());
 	user.setPassword(jsonObject.get("password").getAsString());
 
