@@ -82,7 +82,7 @@ public class RequestHandler extends Thread {
 
 	try {
 	    // client test only
-	    request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
+	    // request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
 	    
 	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
 	    // Ако няма тип връщаме грешка 400
