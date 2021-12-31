@@ -13,7 +13,7 @@ public class Server extends Thread {
     
     @Override
     public void run() {	
-	while(!serverSocket.isClosed()) { // слушаме докато порта не се затвори
+	while(!serverSocket.isClosed()) { // слушаме докато портът не се затвори
 	    process();
         }
     }

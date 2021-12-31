@@ -40,7 +40,7 @@ public class RequestHandler extends Thread {
 	    DataInputStream inputStream = new DataInputStream(socket.getInputStream());
 	    int readResult = inputStream.read(inputMessage, 0, MESSAGE_LENGTH);
 	    
-	    // Проверяваме дали клиентът не е затвори връзката
+	    // Проверяваме дали клиентът не е затворил връзката
 	    if (readResult == READ_FAILED) { 
 		System.out.println("Closing connection...");
 		
