@@ -23,11 +23,9 @@ public class LoginDataHandler implements IDataHandler<User> {
     
     @Override
     public String process(String request) {
-	
 	String response = null;
 	
 	try {
-	    
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
     	    gsonBuilder.registerTypeAdapter(User.class, new LoginDataHandler());
@@ -39,49 +37,63 @@ public class LoginDataHandler implements IDataHandler<User> {
     	    // Изчитане на заявката
     	    User user = json.fromJson(request, User.class);
     	
-    	    // Обработване на заявката
-    	    Session session = DatabaseConnection.getSessionFactory().openSession();
-    	
-    	    if (user.getRequestType() == RequestType.LOGIN_CREDENTIALS) {
-    		
-    		CriteriaBuilder builder = session.getCriteriaBuilder();
-    		CriteriaQuery<User> query = builder.createQuery(User.class);
-    		Root<User> root = query.from(User.class);
-    
-    		List<Predicate> predicates = new ArrayList<Predicate>();
-    		predicates.add(builder.equal(root.get("name"), user.getName()));
-    		predicates.add(builder.equal(root.get("password"), user.getPassword()));
-    	
-    		query.select(root).where(predicates.toArray(new Predicate[] {}));
-    	
-    		// Изпълняване на заявката към базата данни
-    		List<User> users = session.createQuery(query).getResultList();
-    	    
-    		// Подготвяне на отговор
-    		User proccesedUser = new User();
-    	    
-    		if (users.size() != 0) // Има намерен запис
-    		    user = users.get(0);    	    
-    	   
-    		response = json.toJson(proccesedUser);
-    		
-    	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
-    		
-    		// Записване на потребителя в базата данни
-		session.beginTransaction();
-		session.save(user); // връща генерираното ID
-		session.getTransaction().commit();
-    	    
-    		// Подготвяне на отговор    
-    		response = json.toJson(user);
-    		
-    	    }
-    	    
+    	    // Обработване на заявката от базата данни
+    	    response = databaseProcessing(user, json);
 	} catch (Exception e) {
+	    response = ResponseType.createErrorResponse(400);
 	    e.printStackTrace();
 	}
 	
 	return response;
+    }
+
+    private String databaseProcessing(User user, Gson json) {
+   	String response = null;
+   	
+   	try {
+       	    Session session = DatabaseConnection.getSessionFactory().openSession();
+       	
+       	    if (user.getRequestType() == RequestType.LOGIN_CREDENTIALS) {
+       		
+       		CriteriaBuilder builder = session.getCriteriaBuilder();
+       		CriteriaQuery<User> query = builder.createQuery(User.class);
+       		Root<User> root = query.from(User.class);
+       
+       		List<Predicate> predicates = new ArrayList<Predicate>();
+       		predicates.add(builder.equal(root.get("name"), user.getName()));
+       		predicates.add(builder.equal(root.get("password"), user.getPassword()));
+       	
+       		query.select(root).where(predicates.toArray(new Predicate[] {}));
+       	
+       		// Изпълняване на заявката към базата данни
+       		List<User> users = session.createQuery(query).getResultList();
+       	    
+       		// Подготвяне на отговор
+       		User proccesedUser = new User();
+       	    
+       		if (users.size() != 0) // Има намерен запис
+       		    proccesedUser = users.get(0);
+
+       		proccesedUser.setRequestType(user.getRequestType());
+       		response = json.toJson(proccesedUser);
+       		
+       	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
+       		
+       		// Записване на потребителя в базата данни
+   		session.beginTransaction();
+   		session.save(user); // връща генерираното ID
+   		session.getTransaction().commit();
+       	    
+       		// Подготвяне на отговор
+       		response = json.toJson(user);
+       		
+       	    } // if
+   	} catch (Exception e) {
+   	    response = ResponseType.createErrorResponse(500);
+   	    e.printStackTrace();
+   	}
+   	
+   	return response;
     }
     
     @Override
