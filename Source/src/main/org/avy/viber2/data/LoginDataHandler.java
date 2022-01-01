@@ -73,7 +73,6 @@ public class LoginDataHandler implements IDataHandler<User> {
 		    proccesedUser = users.get(0);
 
 		proccesedUser.setRequestType(user.getRequestType());
-		response = json.toJson(proccesedUser);
 
 	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
 		proccesedUser = user; // налага се, за да може да върнем правилният код за грешка
@@ -90,7 +89,7 @@ public class LoginDataHandler implements IDataHandler<User> {
 
 	// Подготвяне на отговор
 	try {
-	    response = json.toJson(user);
+	    response = json.toJson(proccesedUser);
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(571);
 	    e.printStackTrace();
