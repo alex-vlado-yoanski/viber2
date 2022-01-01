@@ -64,10 +64,17 @@ public class User extends AdditionalRequestData {
 	return this.receivedInvitations;
     }
 
+    public List<Chat> getChats() {
+		return chats;
+	}
+    
     public User() {
 	this.ID = 0;
 	this.name = null;
 	this.password = null;
 	this.sendInvitations = new ArrayList<UserInvitation>();
+	this.receivedInvitations = new ArrayList<UserInvitation>();
+	this.chats = new ArrayList<Chat>();
+	this.messages = new ArrayList<Message>();
     }
 }

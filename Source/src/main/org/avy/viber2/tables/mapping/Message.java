@@ -30,7 +30,7 @@ public class Message {
     @JoinColumn(name = "sent_by", foreignKey = @ForeignKey(name = "fk_messages_sent_by"))
     private User sentBy;
 
-    public int getID() {
+	public int getID() {
 	return ID;
     }
 
@@ -57,6 +57,10 @@ public class Message {
     public void setCreateDate(Timestamp createDate) {
 	this.createDate = createDate;
     }
+
+    public User getSentBy() {
+		return sentBy;
+	}
 
     public Message() {
 	this.ID = 0;

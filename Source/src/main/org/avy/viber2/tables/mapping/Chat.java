@@ -26,6 +26,10 @@ public class Chat {
 	return messages;
     }
 
+    public void setMessages(List<Message> msgList) {
+   	this.messages = msgList ;
+    }
+    
     public Chat() {
 	this.ID = 0;
 	this.messages = new ArrayList<Message>();

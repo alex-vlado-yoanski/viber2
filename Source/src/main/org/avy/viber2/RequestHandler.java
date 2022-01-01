@@ -65,7 +65,9 @@ public class RequestHandler extends Thread {
 	    
 	    // client test only
 	    //request = "{\"requestType\" : \"2\",\"name\": \"SA\",\"password\": \"common\"}";
-	    
+	    //request = "{\"requestType\":\"3\",\"user_id\":\"2\"}";
+	    //request = "{\"requestType\":\"4\",\"invitations\":[{\"invitationID\":\"0\",\"status\":\"1\".\"sender\"{\"senderID\":\"0\",\"name\":\"test\"},\"receiver\":{\"receiverID\":\"0\",\"name\":\"test\"}}]}";
+
 	    // Налага се всека заявка да има добавен тип, за да знаем как да обработим заявката
 	    // Ако няма тип връщаме грешка 400
 	    int requestType = 0;
@@ -80,6 +82,16 @@ public class RequestHandler extends Thread {
 	    	    response = login.process(request);
 	    	    break;
 	    	}
+	    	case RequestType.USER_CHATS: {
+	    	    UserChatsDataHandler userChats = new UserChatsDataHandler();
+	    	    response = userChats.process(request);
+	    	    break;
+	    	}
+	    	case RequestType.USER_INVITATIONS: {
+	    		// TODO: добави handler за покани
+	    	    break;
+	    	}
+	    	    
 	    	// следващият вид заявка да се разписва тук ^
 	    	default:{
 	    	    response = createErrorResponse(470);
