@@ -83,7 +83,7 @@ public class RequestHandler extends Thread {
 
 	try {
 	    // client test only
-	    request = "{\"requestType\" : \"1\",\"name\": \"SA\",\"password\":\"common\"}";
+	    // request = "{\"requestType\" : \"1\",\"name\": \"SA\",\"password\":\"common\"}";
 	    // request = "{\"requestType\":\"3\",\"user_id\":\"2\"}";
 	    // request =
 	    // "{\"requestType\":\"4\",\"invitations\":[{\"invitationID\":\"0\",\"status\":\"1\".\"sender\"{\"senderID\":\"0\",\"name\":\"test\"},\"receiver\":{\"receiverID\":\"0\",\"name\":\"test\"}}]}";
