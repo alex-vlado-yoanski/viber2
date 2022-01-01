@@ -75,8 +75,7 @@ public class UserInvitationsExtractorHandler implements IDataHandler<User> {
     public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {
 	JsonObject TopLevelJSON = new JsonObject();
 	JsonObject SecondLevelJSON = new JsonObject();
-	JsonObject SenderJSON = new JsonObject();
-	JsonObject ReceiverJSON = new JsonObject();
+	JsonObject ThirdLevelJSON = new JsonObject();
 	JsonArray JSONArray = new JsonArray();
 
 	TopLevelJSON.addProperty("requestType", RequestType.USER_INVITATIONS_EXTRACT);
@@ -84,25 +83,33 @@ public class UserInvitationsExtractorHandler implements IDataHandler<User> {
 	for (UserInvitation userInvitation : user.getSendInvitations()) {
 	    int InvitationID = userInvitation.getID();
 	    int Status = userInvitation.getStatus();
+
 	    long SenderID = userInvitation.getSender().getID();
-	    long ReceiverID = userInvitation.getReceiver().getID(); // TODO: getRecvieverID -> getRecveiverID
+	    long ReceiverID = userInvitation.getReceiver().getID();
+
 	    String SenderName = userInvitation.getSender().getName();
 	    String ReceiverName = userInvitation.getReceiver().getName();
 
+	    // Второ ниво
 	    SecondLevelJSON.addProperty("invitationID", InvitationID);
 	    SecondLevelJSON.addProperty("status", Status);
 	    JSONArray.add(SecondLevelJSON);
 
-	    SenderJSON.addProperty("senderID", SenderID);
-	    SenderJSON.addProperty("name", SenderName);
+	    // Трето ниво - изпратил покана
+	    ThirdLevelJSON.addProperty("senderID", SenderID);
+	    ThirdLevelJSON.addProperty("name", SenderName);
+	    SecondLevelJSON.add("sender", ThirdLevelJSON);
 
-	    ReceiverJSON.addProperty("receiverID", ReceiverID);
-	    ReceiverJSON.addProperty("name", ReceiverName);
+	    // Присвояваме нов JSON обект, спестяваме създаване на един обект
+	    ThirdLevelJSON = new JsonObject();
 
-	    SecondLevelJSON.add("sender", SenderJSON);
-	    SecondLevelJSON.add("reciever", ReceiverJSON);
+	    // Трето ниво - получател покана
+	    ThirdLevelJSON.addProperty("receiverID", ReceiverID);
+	    ThirdLevelJSON.addProperty("name", ReceiverName);
+	    SecondLevelJSON.add("reciever", ThirdLevelJSON);
 	}
 
+	// Първо ниво
 	TopLevelJSON.add("invitations", JSONArray);
 
 	return TopLevelJSON;
