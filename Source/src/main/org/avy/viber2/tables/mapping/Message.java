@@ -59,8 +59,8 @@ public class Message {
     }
 
     public User getSentBy() {
-		return sentBy;
-	}
+	return sentBy;
+    }
 
     public Message() {
 	this.ID = 0;

@@ -65,9 +65,9 @@ public class User extends AdditionalRequestData {
     }
 
     public List<Chat> getChats() {
-		return chats;
-	}
-    
+	return chats;
+    }
+
     public User() {
 	this.ID = 0;
 	this.name = null;

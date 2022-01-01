@@ -13,23 +13,23 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "user_invitations")
 public class UserInvitation {
-    
+
     @Id
     @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    
+
     @Column(name = "status", nullable = false)
     private int status;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", foreignKey = @ForeignKey(name = "fk_user_invitations_sender_id"))
     private User sender;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_user_invitations_receiver_id"))
     private User receiver;
-    
+
     @Column(name = "create_date", nullable = false)
     private Timestamp createDate;
 

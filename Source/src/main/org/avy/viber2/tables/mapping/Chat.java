@@ -6,12 +6,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "chats")
 public class Chat {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
     private int ID;
-    
+
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
 
@@ -27,9 +27,9 @@ public class Chat {
     }
 
     public void setMessages(List<Message> msgList) {
-   	this.messages = msgList ;
+	this.messages = msgList;
     }
-    
+
     public Chat() {
 	this.ID = 0;
 	this.messages = new ArrayList<Message>();
