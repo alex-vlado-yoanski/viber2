@@ -53,7 +53,7 @@ public class UserInvitation {
 	this.sender = sender;
     }
 
-    public User getReciever() {
+    public User getReceiver() {
 	return receiver;
     }
 

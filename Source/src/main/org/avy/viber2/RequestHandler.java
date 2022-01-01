@@ -8,11 +8,10 @@ import org.avy.viber2.data.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-/**
- * Как се добавя нов тип заявка: 1. Дефиниране на номера на заявката в
- * data/RequestType.java 2. Разписване на handler наследник на
- * IDataHandler<YOUR_CLASS> 3. Добавяне на новия handler в process(...)
- */
+//Как се добавя нов тип заявка:
+//	1. Дефиниране на номера на заявката в data/RequestType.java
+//	2. Разписване на handler наследник на IDataHandler<YOUR_CLASS>
+//	3. Добавяне на новия handler в process(...)
 
 public class RequestHandler extends Thread {
     private static final int MESSAGE_LENGTH = 1500;
@@ -87,8 +86,8 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"3\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"4\",\"invitations\":[{\"invitationID\":\"0\",\"status\":\"1\",\"sender\":{\"senderID\":\"0\",\"name\":\"test\"},\"receiver\":{\"receiverID\":\"0\",\"name\":\"test\"}}]}"
 	    
-	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
-	    // заявката. Ако няма тип връщаме грешка 400.
+	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим заявката.
+	    // Ако няма тип връщаме грешка 400.
 	    int requestType = 0;
 
 	    JsonObject job = new Gson().fromJson(request, JsonObject.class);
@@ -104,6 +103,11 @@ public class RequestHandler extends Thread {
 	    case RequestType.USER_CHATS: {
 		UserChatsDataHandler userChats = new UserChatsDataHandler();
 		response = userChats.process(request);
+		break;
+	    }
+	    case RequestType.USER_INVITATIONS_EXTRACT: {
+		UserInvitationsExtractorHandler invitations = new UserInvitationsExtractorHandler();
+		response = invitations.process(request);
 		break;
 	    }
 	    // следващият вид заявка да се разписва тук ^
