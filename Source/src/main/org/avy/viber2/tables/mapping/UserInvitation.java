@@ -57,7 +57,7 @@ public class UserInvitation {
 	return receiver;
     }
 
-    public void setReciever(User receiver) {
+    public void setReceiver(User receiver) {
 	this.receiver = receiver;
     }
 
