@@ -120,7 +120,7 @@ public class UserInvitationModifyHandler implements IDataHandler<UserInvitation>
 	// Подготвяне на отговор
 	try {
 	    processedInvitation.setRequestType(invitation.getRequestType());
-	    response = json.toJson(invitation);
+	    response = json.toJson(processedInvitation);
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(571);
 	    e.printStackTrace();

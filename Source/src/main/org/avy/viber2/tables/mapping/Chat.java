@@ -5,12 +5,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "chats")
-public class Chat {
+public class Chat extends AdditionalData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
-    private int ID;
+    private long ID;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_chats", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -19,8 +19,12 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
 
-    public int getID() {
+    public long getID() {
 	return ID;
+    }
+
+    public void setID(long id) {
+	this.ID = id;
     }
 
     public List<User> getUsers() {
@@ -29,6 +33,14 @@ public class Chat {
 
     public void setUser(User user) {
 	users.add(user);
+    }
+
+    public List<Message> getMessages() {
+	return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+	this.messages = messages;
     }
 
     public Chat() {

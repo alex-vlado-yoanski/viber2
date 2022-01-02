@@ -6,17 +6,17 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "messages")
-public class Message {
+public class Message extends AdditionalData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
-    private int ID;
+    private long ID;
 
     @ManyToOne(fetch = FetchType.LAZY) // == fetch when needed
     @JoinColumn(name = "chat_id", foreignKey = @ForeignKey(name = "fk_messages_chat_id"))
     private Chat chat;
-    
+
     @Column(name = "text", nullable = false)
     private String text;
 
@@ -30,8 +30,20 @@ public class Message {
     @JoinColumn(name = "sent_by", foreignKey = @ForeignKey(name = "fk_messages_sent_by"))
     private User sentBy;
 
-	public int getID() {
+    public long getID() {
 	return ID;
+    }
+
+    public void setID(long id) {
+	this.ID = id;
+    }
+
+    public Chat getChat() {
+	return chat;
+    }
+
+    public void setChat(Chat chat) {
+	this.chat = chat;
     }
 
     public String getText() {
@@ -64,10 +76,10 @@ public class Message {
 
     public Message() {
 	this.ID = 0;
+	this.chat = new Chat();
 	this.text = null;
 	this.filePath = null;
 	this.createDate = new Timestamp(0);
-	this.chat = new Chat();
 	this.sentBy = new User();
     }
 }

@@ -87,7 +87,7 @@ public class UserChatsDataHandler implements IDataHandler<User> {
 	JsonObject jsonObject = new JsonObject();
 	JsonArray jsonArray = new JsonArray();
 
-	jsonObject.addProperty("requestType", RequestType.USER_CHATS);
+	jsonObject.addProperty("requestType", user.getRequestType());
 
 	if (user.getChats().size() != 0) {
 	    // Вземаме всички чатове на потребителя

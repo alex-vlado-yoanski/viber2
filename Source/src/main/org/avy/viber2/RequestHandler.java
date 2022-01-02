@@ -90,6 +90,7 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"4\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"5\",\"invitationID\":\"1\",\"status\":\"1\"}";
 	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
+	    // request = "{\"requestType\":\"7\",\"chatID\":\"2\"}";
 	    
 	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
 	    // заявката.
@@ -124,6 +125,11 @@ public class RequestHandler extends Thread {
 	    case RequestType.USER_INVITATION_NEW: {
 		UserInvitationNewHandler invitation = new UserInvitationNewHandler();
 		response = invitation.process(request);
+		break;
+	    }
+	    case RequestType.CHAT_MESSAGES_EXTRACT:{
+		ChatMessagesExtractHandler messages = new ChatMessagesExtractHandler();
+		response = messages.process(request);
 		break;
 	    }
 	    // следващият вид заявка да се разписва тук ^

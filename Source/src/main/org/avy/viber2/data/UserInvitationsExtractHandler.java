@@ -45,26 +45,33 @@ public class UserInvitationsExtractHandler implements IDataHandler<User> {
     private String databaseProcessing(User user, Gson json) {
 	String response = null;
 	User proccesedUser = new User();
-	// Обработване на заявката
-	Session session = DatabaseConnection.getSessionFactory().openSession();
+	
+	try {
+	    // Обработване на заявката
+	    Session session = DatabaseConnection.getSessionFactory().openSession();
 
-	CriteriaBuilder builder = session.getCriteriaBuilder();
-	CriteriaQuery<User> query = builder.createQuery(User.class);
-	Root<User> root = query.from(User.class);
+	    CriteriaBuilder builder = session.getCriteriaBuilder();
+	    CriteriaQuery<User> query = builder.createQuery(User.class);
+	    Root<User> root = query.from(User.class);
 
-	List<Predicate> predicates = new ArrayList<Predicate>();
-	predicates.add(builder.equal(root.get("ID"), user.getID()));
+	    List<Predicate> predicates = new ArrayList<Predicate>();
+	    predicates.add(builder.equal(root.get("ID"), user.getID()));
 
-	query.select(root).where(predicates.toArray(new Predicate[] {}));
+	    query.select(root).where(predicates.toArray(new Predicate[] {}));
 
-	// Изпълняване на заявката към базата данни
-	List<User> users = session.createQuery(query).getResultList();
+	    // Изпълняване на заявката към базата данни
+	    List<User> users = session.createQuery(query).getResultList();
 
-	if (users.size() != 0) // Има намерен запис
-	    proccesedUser = users.get(0);
-
+	    if (users.size() != 0) // Има намерен запис
+		proccesedUser = users.get(0);
+	} catch (Exception e) {
+	    response = ResponseType.createErrorResponse(570);
+	    e.printStackTrace();
+	}
+	
 	// Подготвяне на отговор
 	try {
+	    proccesedUser.setRequestType(user.getRequestType());
 	    response = json.toJson(proccesedUser);
 	} catch (Exception ex) {
 	    response = ResponseType.createErrorResponse(571);
