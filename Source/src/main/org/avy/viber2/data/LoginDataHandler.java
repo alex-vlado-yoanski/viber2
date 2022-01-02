@@ -81,7 +81,9 @@ public class LoginDataHandler implements IDataHandler<User> {
 		session.beginTransaction();
 		session.save(proccesedUser); // връща генерираното ID
 		session.getTransaction().commit();
-	    } // if
+	    }
+	    
+	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();

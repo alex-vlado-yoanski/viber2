@@ -91,6 +91,7 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"5\",\"invitationID\":\"1\",\"status\":\"1\"}";
 	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
 	    // request = "{\"requestType\":\"7\",\"chatID\":\"2\"}";
+	    // request = "{\"requestType\":\"8\",\"chatID\":\"2\",\"text\":\"hello\",\"user\":\"2\"}";
 	    
 	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
 	    // заявката.
@@ -129,6 +130,11 @@ public class RequestHandler extends Thread {
 	    }
 	    case RequestType.CHAT_MESSAGES_EXTRACT:{
 		ChatMessagesExtractHandler messages = new ChatMessagesExtractHandler();
+		response = messages.process(request);
+		break;
+	    }
+	    case RequestType.USER_MESSAGE_NEW:{
+		UserMessageNewHandler messages = new UserMessageNewHandler();
 		response = messages.process(request);
 		break;
 	    }

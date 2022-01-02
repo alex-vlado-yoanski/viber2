@@ -72,8 +72,8 @@ public class User extends AdditionalData {
 
     public User() {
 	this.ID = 0;
-	this.name = null;
-	this.password = null;
+	this.name = "";
+	this.password = "";
 	this.sendInvitations = new ArrayList<UserInvitation>();
 	this.receivedInvitations = new ArrayList<UserInvitation>();
 	this.chats = new ArrayList<Chat>();

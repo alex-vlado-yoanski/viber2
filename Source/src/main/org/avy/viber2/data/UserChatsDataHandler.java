@@ -65,6 +65,7 @@ public class UserChatsDataHandler implements IDataHandler<User> {
 	    if (users.size() != 0) // Има намерен запис
 		proccesedUser = users.get(0);
 
+	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();

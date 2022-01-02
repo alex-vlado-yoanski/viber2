@@ -49,10 +49,10 @@ public class UserInvitationNewHandler implements IDataHandler<UserInvitation> {
 
 	try {
 	    Session session = DatabaseConnection.getSessionFactory().openSession();
-
 	    session.beginTransaction();
 	    session.save(processedInvitation);
 	    session.getTransaction().commit();
+	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();

@@ -77,8 +77,8 @@ public class Message extends AdditionalData {
     public Message() {
 	this.ID = 0;
 	this.chat = new Chat();
-	this.text = null;
-	this.filePath = null;
+	this.text = "";
+	this.filePath = "";
 	this.createDate = new Timestamp(0);
 	this.sentBy = new User();
     }

@@ -66,6 +66,8 @@ public class ChatMessagesExtractHandler implements IDataHandler<Chat> {
 
 	    processedChat.setID(chat.getID());
 	    processedChat.setMessages(messages);
+	    
+	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();
