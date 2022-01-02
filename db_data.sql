@@ -14,24 +14,7 @@ INSERT INTO users(name, password)
 INSERT INTO user_invitations(status, sender_id, receiver_id, create_date)
 	VALUES(2, 2, 3, '2021-11-10 02:32:35');
 
--- Примерни съобщения
--- Проверка с SELECT messages.id,text,file_path,create_date,users.name FROM messages JOIN users ON messages.sent_by=users.id ORDER BY messages.id;
-
-INSERT INTO messages(text, file_path, create_date, sent_by)
-	VALUES('zdr kp', '', '2021-11-11 12:00:00', 2) ;
-INSERT INTO chats(message_id) VALUES (1);
-
-INSERT INTO messages(text, file_path, create_date, sent_by)
-	VALUES('n6t ti', '', '2021-11-11 12:01:32', 3);
-INSERT INTO chats(message_id) VALUES (2);
-
-INSERT INTO messages(text, file_path, create_date, sent_by)
-	VALUES('nz qm bob', '', '2021-11-11 12:01:58', 2);
-INSERT INTO chats(message_id) VALUES (3);
-
-INSERT INTO messages(text, file_path, create_date, sent_by)
-	VALUES ('4ek mlk', '', '2021-11-11 12:03:02', 2);
-INSERT INTO chats(message_id) VALUES (4);
+INSERT INTO chats(id) VALUES (default);
 
 -- Примерна група
 -- Проверка с SELECT user_chats.id,users.name,messages.text FROM user_chats JOIN users ON user_id = users.id JOIN messages ON chat_id = messages.id;
@@ -40,10 +23,19 @@ INSERT INTO user_chats(user_id, chat_id)
 	VALUES (2, 1);
 
 INSERT INTO user_chats(user_id, chat_id)
-	VALUES (3, 2);
+	VALUES (3, 1);
 
-INSERT INTO user_chats(user_id, chat_id)
-	VALUES (2, 3);
+-- Примерни съобщения
+-- Проверка с SELECT messages.id,text,file_path,create_date,users.name FROM messages JOIN users ON messages.sent_by=users.id ORDER BY messages.id;
 
-INSERT INTO user_chats(user_id, chat_id)
-	VALUES (2, 4);
+INSERT INTO messages(chat_id, text, file_path, create_date, sent_by)
+	VALUES(1, 'Zdravei', '', '2021-11-11 12:00:00', 2) ;
+
+INSERT INTO messages(chat_id, text, file_path, create_date, sent_by)
+	VALUES(1, 'Zdravei, kak e', '', '2021-11-11 12:01:32', 3);
+
+INSERT INTO messages(chat_id, text, file_path, create_date, sent_by)
+	VALUES(1, 'Dobre, pri teb?', '', '2021-11-11 12:01:58', 2);
+
+INSERT INTO messages(chat_id, text, file_path, create_date, sent_by)
+	VALUES (1, 'Много добре!', '', '2021-11-11 12:03:02', 2);
