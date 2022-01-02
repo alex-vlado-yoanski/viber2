@@ -3,15 +3,17 @@ package org.avy.viber2;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+
 import org.avy.viber2.data.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-//Как се добавя нов тип заявка:
-//	1. Дефиниране на номера на заявката в data/RequestType.java
-//	2. Разписване на handler наследник на IDataHandler<YOUR_CLASS>
-//	3. Добавяне на новия handler в process(...)
+/**
+ * Как се добавя нов тип заявка: 1. Дефиниране на номера на заявката в
+ * data/RequestType.java 2. Разписване на handler наследник на
+ * IDataHandler<YOUR_CLASS> 3. Добавяне на новия handler в process(...)
+ */
 
 public class RequestHandler extends Thread {
     private static final int MESSAGE_LENGTH = 1500;
@@ -31,7 +33,7 @@ public class RequestHandler extends Thread {
 
 	    // Ако по някаква причина не успеем да затворим сокета,
 	    // въпреки това прекъсваме цикъла, за да не хвърля exception-и
-	    if (!isSocketForClosing)
+	    if (isSocketForClosing)
 		break;
 	}
     }
@@ -82,11 +84,15 @@ public class RequestHandler extends Thread {
 
 	try {
 	    // client test only
-	    // request = "{\"requestType\":\"1\",\"name\":\"kiril\",\"password\":\"parolata\"}";
-	    // request = "{\"requestType\":\"3\",\"userID\":\"2\"}";
-	    // request = "{\"requestType\":\"4\",\"invitations\":[{\"invitationID\":\"0\",\"status\":\"1\",\"sender\":{\"senderID\":\"0\",\"name\":\"test\"},\"receiver\":{\"receiverID\":\"0\",\"name\":\"test\"}}]}"
+	    // request = "{\"requestType\":\"1\",\"name\":\"SA\",\"password\":\"common\"}";
+	    // request = "{\"requestType\":\"2\",\"name\":\"SA\",\"password\":\"common\"}";
+	     request = "{\"requestType\":\"3\",\"userID\":\"2\"}";
+	    // request = "{\"requestType\":\"4\",\"userID\":\"2\"}";
+	    // request = "{\"requestType\":\"5\",\"invitationID\":\"1\",\"status\":\"1\"}";
+	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
 	    
-	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим заявката.
+	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
+	    // заявката.
 	    // Ако няма тип връщаме грешка 400.
 	    int requestType = 0;
 
@@ -106,8 +112,18 @@ public class RequestHandler extends Thread {
 		break;
 	    }
 	    case RequestType.USER_INVITATIONS_EXTRACT: {
-		UserInvitationsExtractorHandler invitations = new UserInvitationsExtractorHandler();
+		UserInvitationsExtractHandler invitations = new UserInvitationsExtractHandler();
 		response = invitations.process(request);
+		break;
+	    }
+	    case RequestType.USER_INVITATION_MODIFY: {
+		UserInvitationModifyHandler invitation = new UserInvitationModifyHandler();
+		response = invitation.process(request);
+		break;
+	    }
+	    case RequestType.USER_INVITATION_NEW: {
+		UserInvitationNewHandler invitation = new UserInvitationNewHandler();
+		response = invitation.process(request);
 		break;
 	    }
 	    // следващият вид заявка да се разписва тук ^
@@ -130,9 +146,6 @@ public class RequestHandler extends Thread {
 
 	try {
 	    System.out.println("Closing connection...");
-
-	    // TODO: синхронизация на клиенти
-
 	    socket.close();
 	    System.out.println("Connection closed");
 	} catch (IOException e) {

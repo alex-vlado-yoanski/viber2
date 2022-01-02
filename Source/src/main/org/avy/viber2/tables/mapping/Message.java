@@ -13,6 +13,10 @@ public class Message {
     @Column(name = "id", insertable = false, updatable = false)
     private int ID;
 
+    @ManyToOne(fetch = FetchType.LAZY) // == fetch when needed
+    @JoinColumn(name = "chat_id", foreignKey = @ForeignKey(name = "fk_messages_chat_id"))
+    private Chat chat;
+    
     @Column(name = "text", nullable = false)
     private String text;
 
@@ -21,10 +25,6 @@ public class Message {
 
     @Column(name = "create_date", nullable = false)
     private Timestamp createDate;
-
-    @ManyToOne(fetch = FetchType.LAZY) // == fetch when needed
-    @JoinColumn(name = "message_id", foreignKey = @ForeignKey(name = "fk_chats_message_id"))
-    private Chat chat;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sent_by", foreignKey = @ForeignKey(name = "fk_messages_sent_by"))

@@ -1,26 +1,20 @@
 package org.avy.viber2.tables.mapping;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
-/*
- * STATUSES:
- * 0 - WAITING
- * 1 - REJECTED
- * 2 - ACCEPTED 
- */
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "user_invitations")
-public class UserInvitation {
+public class UserInvitation extends AdditionalData {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    private long ID;
 
     @Column(name = "status", nullable = false)
-    private int status;
+    private int status; // UserInvitationStatus.java
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", foreignKey = @ForeignKey(name = "fk_user_invitations_sender_id"))
@@ -33,8 +27,12 @@ public class UserInvitation {
     @Column(name = "create_date", nullable = false)
     private Timestamp createDate;
 
-    public int getID() {
+    public long getID() {
 	return ID;
+    }
+    
+    public void setID(long id) {
+	this.ID = id;
     }
 
     public int getStatus() {

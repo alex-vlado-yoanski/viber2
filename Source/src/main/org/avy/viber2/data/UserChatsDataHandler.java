@@ -32,42 +32,53 @@ public class UserChatsDataHandler implements IDataHandler<User> {
 	    // Изчитане на заявката
 	    User user = json.fromJson(request, User.class);
 
+	    // Обработване на заявката от базата данни
 	    response = databaseProcessing(user, json);
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(400);
 	    e.printStackTrace();
 	}
+
 	return response;
     }
 
     private String databaseProcessing(User user, Gson json) {
 	String response = null;
 	User proccesedUser = new User();
+
 	// Обработване на заявката
-	Session session = DatabaseConnection.getSessionFactory().openSession();
+	try {
+	    Session session = DatabaseConnection.getSessionFactory().openSession();
 
-	CriteriaBuilder builder = session.getCriteriaBuilder();
-	CriteriaQuery<User> query = builder.createQuery(User.class);
-	Root<User> root = query.from(User.class);
+	    CriteriaBuilder builder = session.getCriteriaBuilder();
+	    CriteriaQuery<User> query = builder.createQuery(User.class);
+	    Root<User> root = query.from(User.class);
 
-	List<Predicate> predicates = new ArrayList<Predicate>();
-	predicates.add(builder.equal(root.get("ID"), user.getID()));
+	    List<Predicate> predicates = new ArrayList<Predicate>();
+	    predicates.add(builder.equal(root.get("ID"), user.getID()));
 
-	query.select(root).where(predicates.toArray(new Predicate[] {}));
+	    query.select(root).where(predicates.toArray(new Predicate[] {}));
 
-	// Изпълняване на заявката към базата данни
-	List<User> users = session.createQuery(query).getResultList();
+	    // Изпълняване на заявката към базата данни
+	    List<User> users = session.createQuery(query).getResultList();
 
-	if (users.size() != 0) // Има намерен запис
-	    proccesedUser = users.get(0);
+	    if (users.size() != 0) // Има намерен запис
+		proccesedUser = users.get(0);
+
+	} catch (Exception e) {
+	    response = ResponseType.createErrorResponse(570);
+	    e.printStackTrace();
+	}
 
 	// Подготвяне на отговор
 	try {
+	    proccesedUser.setRequestType(user.getRequestType());
 	    response = json.toJson(proccesedUser);
 	} catch (Exception ex) {
 	    response = ResponseType.createErrorResponse(571);
 	    ex.printStackTrace();
 	}
+
 	return response;
     }
 
@@ -78,13 +89,35 @@ public class UserChatsDataHandler implements IDataHandler<User> {
 
 	jsonObject.addProperty("requestType", RequestType.USER_CHATS);
 
-	for (Chat chat : user.getChats()) {
-	    List<Message> messages = chat.getMessages();
-	    if (messages.size() != 0)
-		jsonArray.add(messages.get(0).getSentBy().getName());
+	if (user.getChats().size() != 0) {
+	    // Вземаме всички чатове на потребителя
+	    // Вземаме за всеки чат имената на потребителите и формираме името на чата
+	    for (Chat chat : user.getChats()) {
+		String chatName = "";
+		List<User> chatUsers = chat.getUsers();
+		long chatUsersSize = chatUsers.size();
+
+		for (int index = 0; index < chatUsersSize; index++) {
+		    User chatUser = chatUsers.get(index);
+
+		    if (chatUser.getID() == user.getID())
+			continue;
+
+		    chatName += chatUsers.get(index).getName();
+
+		    if (index != chatUsersSize - 1)
+			chatName += ", ";
+		}
+
+		JsonObject jsonChat = new JsonObject();
+		jsonChat.addProperty("chatID", chat.getID());
+		jsonChat.addProperty("chatName", chatName);
+
+		jsonArray.add(jsonChat);
+	    }
 	}
 
-	jsonObject.add("chatName", jsonArray);
+	jsonObject.add("chats", jsonArray);
 
 	return jsonObject;
     }

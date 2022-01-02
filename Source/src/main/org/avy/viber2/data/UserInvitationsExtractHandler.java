@@ -13,17 +13,18 @@ import org.hibernate.Session;
 
 import com.google.gson.*;
 
-public class UserInvitationsExtractorHandler implements IDataHandler<User> {
-    public UserInvitationsExtractorHandler() {
+public class UserInvitationsExtractHandler implements IDataHandler<User> {
+    public UserInvitationsExtractHandler() {
     }
 
     @Override
     public String process(String request) {
 	String response = null;
+
 	try {
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
-	    gsonBuilder.registerTypeAdapter(User.class, new UserInvitationsExtractorHandler());
+	    gsonBuilder.registerTypeAdapter(User.class, new UserInvitationsExtractHandler());
 	    gsonBuilder.setPrettyPrinting();
 
 	    // Създаване на json обект
@@ -37,6 +38,7 @@ public class UserInvitationsExtractorHandler implements IDataHandler<User> {
 	    response = ResponseType.createErrorResponse(400);
 	    e.printStackTrace();
 	}
+
 	return response;
     }
 
@@ -73,46 +75,36 @@ public class UserInvitationsExtractorHandler implements IDataHandler<User> {
 
     @Override
     public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {
-	JsonObject TopLevelJSON = new JsonObject();
-	JsonObject SecondLevelJSON = new JsonObject();
-	JsonObject ThirdLevelJSON = new JsonObject();
-	JsonArray JSONArray = new JsonArray();
+	JsonObject jsonObject = new JsonObject();
+	JsonArray jsonArray = new JsonArray();
 
-	TopLevelJSON.addProperty("requestType", RequestType.USER_INVITATIONS_EXTRACT);
+	jsonObject.addProperty("requestType", RequestType.USER_INVITATIONS_EXTRACT);
 
 	for (UserInvitation userInvitation : user.getSendInvitations()) {
-	    int InvitationID = userInvitation.getID();
-	    int Status = userInvitation.getStatus();
+	    // Покана
+	    JsonObject invitation = new JsonObject();
+	    invitation.addProperty("invitationID", userInvitation.getID());
+	    invitation.addProperty("status", userInvitation.getStatus());
+	    jsonArray.add(invitation);
 
-	    long SenderID = userInvitation.getSender().getID();
-	    long ReceiverID = userInvitation.getReceiver().getID();
+	    // Изпратил поканата
+	    JsonObject jsonSender = new JsonObject();
+	    User sender = userInvitation.getSender();
+	    jsonSender.addProperty("senderID", sender.getID());
+	    jsonSender.addProperty("name", sender.getName());
+	    invitation.add("sender", jsonSender);
 
-	    String SenderName = userInvitation.getSender().getName();
-	    String ReceiverName = userInvitation.getReceiver().getName();
-
-	    // Второ ниво
-	    SecondLevelJSON.addProperty("invitationID", InvitationID);
-	    SecondLevelJSON.addProperty("status", Status);
-	    JSONArray.add(SecondLevelJSON);
-
-	    // Трето ниво - изпратил покана
-	    ThirdLevelJSON.addProperty("senderID", SenderID);
-	    ThirdLevelJSON.addProperty("name", SenderName);
-	    SecondLevelJSON.add("sender", ThirdLevelJSON);
-
-	    // Присвояваме нов JSON обект, спестяваме създаване на един обект
-	    ThirdLevelJSON = new JsonObject();
-
-	    // Трето ниво - получател покана
-	    ThirdLevelJSON.addProperty("receiverID", ReceiverID);
-	    ThirdLevelJSON.addProperty("name", ReceiverName);
-	    SecondLevelJSON.add("reciever", ThirdLevelJSON);
+	    // Получател на поканата
+	    JsonObject jsonReceiver = new JsonObject();
+	    User receiver = userInvitation.getReceiver();
+	    jsonReceiver.addProperty("receiverID", receiver.getID());
+	    jsonReceiver.addProperty("name", receiver.getName());
+	    invitation.add("reciever", jsonReceiver);
 	}
 
-	// Първо ниво
-	TopLevelJSON.add("invitations", JSONArray);
+	jsonObject.add("invitations", jsonArray);
 
-	return TopLevelJSON;
+	return jsonObject;
     }
 
     @Override

@@ -2,11 +2,10 @@ package org.avy.viber2.tables.mapping;
 
 import java.util.*;
 import javax.persistence.*;
-import org.avy.viber2.data.*;
 
 @Entity
 @Table(name = "users")
-public class User extends AdditionalRequestData {
+public class User extends AdditionalData {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
@@ -25,9 +24,8 @@ public class User extends AdditionalRequestData {
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInvitation> receivedInvitations;
 
-    @ManyToMany
-    @JoinTable(name = "user_chats", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    List<Chat> chats;
+    @ManyToMany(mappedBy = "users")
+    private List<Chat> chats;
 
     @OneToMany(mappedBy = "sentBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
@@ -68,6 +66,10 @@ public class User extends AdditionalRequestData {
 	return chats;
     }
 
+    public void setChat(Chat chat) {
+	this.chats.add(chat);
+    }
+
     public User() {
 	this.ID = 0;
 	this.name = null;
@@ -77,4 +79,5 @@ public class User extends AdditionalRequestData {
 	this.chats = new ArrayList<Chat>();
 	this.messages = new ArrayList<Message>();
     }
+
 }

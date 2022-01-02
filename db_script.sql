@@ -2,8 +2,8 @@
 -- Подготовка за изпълнение
 
 DROP TABLE IF EXISTS user_chats CASCADE;
-DROP TABLE IF EXISTS chats CASCADE;
 DROP TABLE IF EXISTS messages CASCADE;
+DROP TABLE IF EXISTS chats CASCADE;
 DROP TABLE IF EXISTS user_invitations CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
@@ -31,27 +31,27 @@ CREATE TABLE user_invitations(
 	CONSTRAINT fk_user_invitations_receiver_id FOREIGN KEY(receiver_id) REFERENCES users(id)
 );
 
+-- Създаваме на таблица 'chats'
+
+CREATE TABLE chats(
+    id        	INT GENERATED ALWAYS AS IDENTITY,
+	
+	CONSTRAINT pk_chats PRIMARY KEY(id)
+);
+
 -- Създаваме на таблица 'messages'
 
 CREATE TABLE messages(
     id        		INT GENERATED ALWAYS AS IDENTITY,
+	chat_id			INT 			NOT NULL,
     text     		VARCHAR(256) 	NOT NULL,
 	file_path		VARCHAR(260) 	NOT NULL,
 	create_date		TIMESTAMP 		NOT NULL,
 	sent_by			INT 			NOT NULL,
 	
 	CONSTRAINT pk_messages PRIMARY KEY(id),
+	CONSTRAINT fk_messages_chat_id FOREIGN KEY(chat_id) REFERENCES chats(id),
 	CONSTRAINT fk_messages_sent_by FOREIGN KEY(sent_by) REFERENCES users(id)
-);
-
--- Създаваме на таблица 'chats'
-
-CREATE TABLE chats(
-    id        	INT GENERATED ALWAYS AS IDENTITY,
-    message_id  INT NOT NULL,
-	
-	CONSTRAINT pk_chats PRIMARY KEY(id),
-	CONSTRAINT fk_chats_message_id FOREIGN KEY(message_id) REFERENCES messages(id)
 );
 
 -- Създаваме на таблица 'user_chats'
@@ -61,9 +61,9 @@ CREATE TABLE user_chats(
     user_id     INT NOT NULL,
 	chat_id		INT NOT NULL,
 	
-	CONSTRAINT pk_user_chats PRIMARY KEY(id),
-	CONSTRAINT fk_user_chats_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-	CONSTRAINT fk_user_chats_chat_id FOREIGN KEY(chat_id) REFERENCES chats(id)
+	CONSTRAINT pk_user_chats PRIMARY KEY(id)
+	-- CONSTRAINT fk_user_chats_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+	-- CONSTRAINT fk_user_chats_chat_id FOREIGN KEY(chat_id) REFERENCES chats(id)
 );
 
 -- Инициализация на таблицa 'users'

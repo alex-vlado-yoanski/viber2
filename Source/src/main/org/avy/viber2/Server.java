@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.*;
 
 public class Server extends Thread {
-    private int portNumber;
     private ServerSocket serverSocket;
+    private int portNumber;
 
     public Server(int portNumber) {
 	this.portNumber = portNumber;
@@ -39,8 +39,10 @@ public class Server extends Thread {
 	    Socket socket = serverSocket.accept();
 	    System.out.println("Connection established.");
 
+	    System.out.println("New thread created.");
 	    RequestHandler requestHandler = new RequestHandler(socket);
 	    requestHandler.start(); // пускаме на нова нишка
+	    System.out.println("Thread closed.");
 	} catch (IOException e) {
 	    System.out.println("Establishing connection failed...");
 	    e.printStackTrace();

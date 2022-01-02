@@ -14,10 +14,8 @@ import org.hibernate.Session;
 
 import com.google.gson.*;
 
-public class LoginDataHandler implements IDataHandler<User> {
-
+public class LoginDataHandler implements IDataHandler<User> {    
     public LoginDataHandler() {
-
     }
 
     @Override
@@ -50,31 +48,33 @@ public class LoginDataHandler implements IDataHandler<User> {
 	String response = null;
 	User proccesedUser = new User();
 
+	// Обработване на заявката
 	try {
 	    Session session = DatabaseConnection.getSessionFactory().openSession();
 
+	    CriteriaBuilder builder = session.getCriteriaBuilder();
+	    CriteriaQuery<User> query = builder.createQuery(User.class);
+	    Root<User> root = query.from(User.class);
+
+	    List<Predicate> predicates = new ArrayList<Predicate>();
+	    predicates.add(builder.equal(root.get("name"), user.getName()));
+
 	    if (user.getRequestType() == RequestType.LOGIN_CREDENTIALS) {
-
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<User> query = builder.createQuery(User.class);
-		Root<User> root = query.from(User.class);
-
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(builder.equal(root.get("name"), user.getName()));
 		predicates.add(builder.equal(root.get("password"), user.getPassword()));
+	    }
+	    query.select(root).where(predicates.toArray(new Predicate[] {}));
 
-		query.select(root).where(predicates.toArray(new Predicate[] {}));
+	    // Изпълняване на заявката към базата данни
+	    List<User> users = session.createQuery(query).getResultList();
 
-		// Изпълняване на заявката към базата данни
-		List<User> users = session.createQuery(query).getResultList();
+	    boolean hasRecord = false;
+	    if (users.size() != 0)
+		hasRecord = true;
 
-		// Подготвяне на отговор
-		if (users.size() != 0) // Има намерен запис
+	    if (user.getRequestType() == RequestType.LOGIN_CREDENTIALS) {
+		if (hasRecord)
 		    proccesedUser = users.get(0);
-
-		proccesedUser.setRequestType(user.getRequestType());
-
-	    } else if (user.getRequestType() == RequestType.SIGN_IN) {
+	    } else if (user.getRequestType() == RequestType.SIGN_IN && !hasRecord) {
 		proccesedUser = user; // налага се, за да може да върнем правилният код за грешка
 
 		// Записване на потребителя в базата данни
@@ -89,6 +89,7 @@ public class LoginDataHandler implements IDataHandler<User> {
 
 	// Подготвяне на отговор
 	try {
+	    proccesedUser.setRequestType(user.getRequestType());
 	    response = json.toJson(proccesedUser);
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(571);
@@ -97,7 +98,7 @@ public class LoginDataHandler implements IDataHandler<User> {
 
 	return response;
     }
-
+    
     @Override
     public JsonElement serialize(User user, Type typeOfUser, JsonSerializationContext context) {
 	JsonObject jsonObject = new JsonObject();
