@@ -92,10 +92,13 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
 	    // request = "{\"requestType\":\"7\",\"chatID\":\"2\"}";
 	    // request = "{\"requestType\":\"8\",\"chatID\":\"2\",\"text\":\"hello\",\"user\":\"2\"}";
+	    // request = "{\"requestType\":\"9\",\"chatID\":\"2\",\"text\":\"hello2\",\"user\":\"2\",\"messageID\":\"8\"}";
+	    // request = "{\"requestType\":\"10\",\"phrase\":\"kir\"}";
+	    // request = "{\"requestType\":\"12\"}";
+	     request = "{\"requestType\":\"13\",\"chatID\":\"2\",\"userID\":\"1\"}";
 	    
 	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
-	    // заявката.
-	    // Ако няма тип връщаме грешка 400.
+	    // заявката. Ако няма тип връщаме грешка 400.
 	    int requestType = 0;
 
 	    JsonObject job = new Gson().fromJson(request, JsonObject.class);
@@ -128,14 +131,35 @@ public class RequestHandler extends Thread {
 		response = invitation.process(request);
 		break;
 	    }
-	    case RequestType.CHAT_MESSAGES_EXTRACT:{
+	    case RequestType.CHAT_MESSAGES_EXTRACT: {
 		ChatMessagesExtractHandler messages = new ChatMessagesExtractHandler();
 		response = messages.process(request);
 		break;
 	    }
-	    case RequestType.USER_MESSAGE_NEW:{
+	    case RequestType.USER_MESSAGE_NEW: {
 		UserMessageNewHandler messages = new UserMessageNewHandler();
 		response = messages.process(request);
+		break;
+	    }
+	    case RequestType.USER_MESSAGE_EDIT: {
+		UserMessageEditHandler messages = new UserMessageEditHandler();
+		response = messages.process(request);
+		break;
+	    }
+	    case RequestType.USER_SEARCH: 
+	    case RequestType.USER_SEARCH_FOR_GROUP: {
+		UserSearchHandler user = new UserSearchHandler();
+		response = user.process(request);
+		break;
+	    }
+	    case RequestType.CREATE_CHAT: {
+		CreateChatHandler chat = new CreateChatHandler();
+		response = chat.process(request);
+		break;
+	    }
+	    case RequestType.ADD_USER_TO_CHAT: {
+		AddUserToChatHandler chat = new AddUserToChatHandler();
+		response = chat.process(request);
 		break;
 	    }
 	    // следващият вид заявка да се разписва тук ^

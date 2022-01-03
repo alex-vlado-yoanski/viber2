@@ -12,6 +12,10 @@ public class RequestType {
     public static final int CHAT_MESSAGES_EXTRACT = 7;
     public static final int USER_MESSAGE_NEW = 8;
     public static final int USER_MESSAGE_EDIT = 9;
+    public static final int USER_SEARCH = 10;
+    public static final int USER_SEARCH_FOR_GROUP = 11;
+    public static final int CREATE_CHAT = 12;
+    public static final int ADD_USER_TO_CHAT = 13;
     // дефиниране на номера на следващата заявка, която очакваме тук ^
 
 }
