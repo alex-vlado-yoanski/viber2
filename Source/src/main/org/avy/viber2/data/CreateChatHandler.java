@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import org.avy.viber2.database.DatabaseConnection;
 import org.avy.viber2.tables.mapping.Chat;
+import org.avy.viber2.tables.mapping.User;
 import org.hibernate.Session;
 
 import com.google.gson.*;
@@ -43,7 +44,8 @@ public class CreateChatHandler implements IDataHandler<Chat> {
 	String response = null;
 
 	Chat processedChat = new Chat();
-
+	processedChat.setUsers(chat.getUsers());
+	
 	try {
 	    Session session = DatabaseConnection.getSessionFactory().openSession();
 	    session.beginTransaction();
@@ -84,6 +86,10 @@ public class CreateChatHandler implements IDataHandler<Chat> {
 
 	Chat chat = new Chat();
 	chat.setRequestType(jsonObject.get("requestType").getAsInt());
+	
+	User user = new User();
+	user.setID(jsonObject.get("userID").getAsLong());
+	chat.setUser(user);
 
 	return chat;
     }

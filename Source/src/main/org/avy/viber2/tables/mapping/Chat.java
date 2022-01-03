@@ -30,6 +30,10 @@ public class Chat extends AdditionalData {
     public List<User> getUsers() {
 	return users;
     }
+    
+    public void setUsers(List<User> users) {
+	this.users = users;
+    }
 
     public void setUser(User user) {
 	users.add(user);
