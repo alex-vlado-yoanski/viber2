@@ -95,7 +95,7 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"9\",\"chatID\":\"2\",\"text\":\"hello2\",\"user\":\"2\",\"messageID\":\"8\"}";
 	    // request = "{\"requestType\":\"10\",\"phrase\":\"kir\"}";
 	    // request = "{\"requestType\":\"12\"}";
-	     request = "{\"requestType\":\"13\",\"chatID\":\"2\",\"userID\":\"1\"}";
+	    // request = "{\"requestType\":\"13\",\"chatID\":\"2\",\"userID\":\"1\"}";
 	    
 	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
 	    // заявката. Ако няма тип връщаме грешка 400.
