@@ -86,7 +86,7 @@ public class RequestHandler extends Thread {
 	    // client test only
 	    // request = "{\"requestType\":\"1\",\"name\":\"SA\",\"password\":\"common\"}";
 	    // request = "{\"requestType\":\"2\",\"name\":\"SA\",\"password\":\"common\"}";
-	    // request = "{\"requestType\":\"3\",\"userID\":\"2\"}";
+	     request = "{\"requestType\":\"3\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"4\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"5\",\"invitationID\":\"1\",\"status\":\"1\"}";
 	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
@@ -162,6 +162,14 @@ public class RequestHandler extends Thread {
 		response = chat.process(request);
 		break;
 	    }
+	    /*case RequestType.FALE_UPLOAD: {
+		break;
+	    }
+	    case RequestType.FALE_READ: {
+		FileReadHandler file = new FileReadHandler();
+		response = file.process(request);
+		break;
+	    }*/
 	    // следващият вид заявка да се разписва тук ^
 	    default: {
 		response = ResponseType.createErrorResponse(470);

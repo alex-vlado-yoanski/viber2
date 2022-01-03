@@ -53,19 +53,14 @@ public class UserInvitationsExtractHandler implements IDataHandler<User> {
 	    CriteriaBuilder builder = session.getCriteriaBuilder();
 	    CriteriaQuery<User> query = builder.createQuery(User.class);
 	    Root<User> root = query.from(User.class);
-
 	    List<Predicate> predicates = new ArrayList<Predicate>();
+	    
 	    predicates.add(builder.equal(root.get("ID"), user.getID()));
-
 	    query.select(root).where(predicates.toArray(new Predicate[] {}));
-
-	    // Изпълняване на заявката към базата данни
 	    List<User> users = session.createQuery(query).getResultList();
 
-	    if (users.size() != 0) // Има намерен запис
+	    if (users.size() != 0)
 		proccesedUser = users.get(0);
-	    
-	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();

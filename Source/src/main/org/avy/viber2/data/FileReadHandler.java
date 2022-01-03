@@ -1,13 +1,9 @@
 package org.avy.viber2.data;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.avy.viber2.database.DatabaseConnection;
 import org.avy.viber2.tables.mapping.Message;
@@ -15,9 +11,9 @@ import org.hibernate.Session;
 
 import com.google.gson.*;
 
-public class UserMessageEditHandler implements IDataHandler<Message> {
+public class FileReadHandler implements IDataHandler<Message> {
 
-    public UserMessageEditHandler() {
+    public FileReadHandler() {
     }
 
     @Override
@@ -49,7 +45,7 @@ public class UserMessageEditHandler implements IDataHandler<Message> {
     private String databaseProcessing(Message message, Gson json) {
 	String response = null;
 	Message processedMessage = new Message();
-
+	// TODO: Files
 	try {
 	    Session session = DatabaseConnection.getSessionFactory().openSession();
 	    CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -63,13 +59,10 @@ public class UserMessageEditHandler implements IDataHandler<Message> {
 
 	    if (messages.size() != 0) {
 		processedMessage = messages.get(0);
-
-		processedMessage.setText(message.getText());
-
-		session.beginTransaction();
-		session.update(processedMessage);
-		session.getTransaction().commit();
+		
+		
 	    }
+
 	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
@@ -93,7 +86,7 @@ public class UserMessageEditHandler implements IDataHandler<Message> {
 	JsonObject jsonObject = new JsonObject();
 
 	jsonObject.addProperty("requestType", message.getRequestType());
-	jsonObject.addProperty("chatID", message.getChat().getID());
+	jsonObject.addProperty("content", message.getChat().getID());
 
 	JsonObject jsonMessage = new JsonObject();
 	jsonMessage.addProperty("id", message.getID());
@@ -110,12 +103,8 @@ public class UserMessageEditHandler implements IDataHandler<Message> {
 
 	Message message = new Message();
 	message.setRequestType(jsonObject.get("requestType").getAsInt());
-	message.getChat().setID(jsonObject.get("chatID").getAsLong());
-	message.setText(jsonObject.get("text").getAsString());
-	message.getSentBy().setID(jsonObject.get("user").getAsLong());
 	message.setID(jsonObject.get("messageID").getAsLong());
 
 	return message;
     }
-
 }

@@ -60,14 +60,10 @@ public class ChatMessagesExtractHandler implements IDataHandler<Chat> {
 
 	    predicates.add(builder.equal(root.get("chat"), chat.getID()));
 	    query.select(root).where(predicates.toArray(new Predicate[] {}));
-
-	    // Изпълняване на заявката към базата данни
 	    List<Message> messages = session.createQuery(query).getResultList();
 
 	    processedChat.setID(chat.getID());
 	    processedChat.setMessages(messages);
-	    
-	    session.close();
 	} catch (Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();

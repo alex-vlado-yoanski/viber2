@@ -4,9 +4,11 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import org.avy.viber2.data.AdditionalMessageData;
+
 @Entity
 @Table(name = "messages")
-public class Message extends AdditionalData {
+public class Message extends AdditionalMessageData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

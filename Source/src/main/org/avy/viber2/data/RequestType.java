@@ -16,6 +16,8 @@ public class RequestType {
     public static final int USER_SEARCH_FOR_GROUP = 11;
     public static final int CREATE_CHAT = 12;
     public static final int ADD_USER_TO_CHAT = 13;
+    public static final int FALE_UPLOAD = 14;
+    public static final int FALE_READ = 15;
     // дефиниране на номера на следващата заявка, която очакваме тук ^
 
 }
