@@ -105,6 +105,28 @@ public class UserInvitationsExtractHandler implements IDataHandler<User> {
 	    jsonReceiver.addProperty("name", receiver.getName());
 	    invitation.add("reciever", jsonReceiver);
 	}
+	
+	for (UserInvitation userInvitation : user.getReceivedInvitations()) {
+	    // Покана
+	    JsonObject invitation = new JsonObject();
+	    invitation.addProperty("invitationID", userInvitation.getID());
+	    invitation.addProperty("status", userInvitation.getStatus());
+	    jsonArray.add(invitation);
+
+	    // Изпратил поканата
+	    JsonObject jsonSender = new JsonObject();
+	    User sender = userInvitation.getSender();
+	    jsonSender.addProperty("senderID", sender.getID());
+	    jsonSender.addProperty("name", sender.getName());
+	    invitation.add("sender", jsonSender);
+
+	    // Получател на поканата
+	    JsonObject jsonReceiver = new JsonObject();
+	    User receiver = userInvitation.getReceiver();
+	    jsonReceiver.addProperty("receiverID", receiver.getID());
+	    jsonReceiver.addProperty("name", receiver.getName());
+	    invitation.add("reciever", jsonReceiver);
+	}
 
 	jsonObject.add("invitations", jsonArray);
 
