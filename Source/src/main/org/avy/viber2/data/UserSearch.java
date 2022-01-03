@@ -7,20 +7,30 @@ import org.avy.viber2.tables.mapping.*;
 
 public class UserSearch extends AdditionalData {
 
-    private String searchPhrase;
+    private String searchingPhrase;
+    private User searchingUser;
     private List<User> users;
 
     UserSearch() {
-	this.searchPhrase = "";
+	this.searchingPhrase = "";
+	this.searchingUser = new User();
 	this.users = new ArrayList<User>();
     }
 
-    public String getSearchPhrase() {
-	return searchPhrase;
+    public String getSearchingPhrase() {
+	return searchingPhrase;
     }
 
-    public void setSearchPhrase(String searchPhrase) {
-	this.searchPhrase = searchPhrase;
+    public void setSearchingPhrase(String searchingPhrase) {
+	this.searchingPhrase = searchingPhrase;
+    }
+
+    public User getSearchingUser() {
+	return searchingUser;
+    }
+
+    public void setSearchingUser(User searchUser) {
+	this.searchingUser = searchUser;
     }
 
     public List<User> getUsers() {
@@ -29,6 +39,10 @@ public class UserSearch extends AdditionalData {
 
     public void setUsers(List<User> users) {
 	this.users = users;
+    }
+
+    public void setUsers(User user) {
+	this.users.add(user);
     }
 
 }

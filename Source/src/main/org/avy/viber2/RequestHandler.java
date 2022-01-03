@@ -91,12 +91,15 @@ public class RequestHandler extends Thread {
 	    // request = "{\"requestType\":\"5\",\"invitationID\":\"1\",\"status\":\"1\"}";
 	    // request = "{\"requestType\":\"6\",\"sender\":\"1\",\"receiver\":\"2\"}";
 	    // request = "{\"requestType\":\"7\",\"chatID\":\"2\"}";
-	    // request = "{\"requestType\":\"8\",\"chatID\":\"2\",\"text\":\"hello\",\"user\":\"2\"}";
-	    // request = "{\"requestType\":\"9\",\"chatID\":\"2\",\"text\":\"hello2\",\"user\":\"2\",\"messageID\":\"8\"}";
-	    // request = "{\"requestType\":\"10\",\"phrase\":\"kir\"}";
+	    // request =
+	    // "{\"requestType\":\"8\",\"chatID\":\"2\",\"text\":\"hello\",\"user\":\"2\"}";
+	    // request =
+	    // "{\"requestType\":\"9\",\"chatID\":\"2\",\"text\":\"hello2\",\"user\":\"2\",\"messageID\":\"8\"}";
+	    // request = "{\"requestType\":\"10\",\"phrase\":\"sto\", \"userID\":\"2\"}";
+	    // request = "{\"requestType\":\"11\",\"phrase\":\"sto\", \"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"12\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"13\",\"chatID\":\"2\",\"userID\":\"1\"}";
-	    
+
 	    // Налага се всяка заявка да има добавен тип, за да знаем как да обработим
 	    // заявката. Ако няма тип връщаме грешка 400.
 	    int requestType = 0;
@@ -146,10 +149,14 @@ public class RequestHandler extends Thread {
 		response = messages.process(request);
 		break;
 	    }
-	    case RequestType.USER_SEARCH: 
-	    case RequestType.USER_SEARCH_FOR_GROUP: {
+	    case RequestType.USER_SEARCH: {
 		UserSearchHandler user = new UserSearchHandler();
 		response = user.process(request);
+		break;
+	    }
+	    case RequestType.USER_SEARCH_FOR_GROUP: {
+		//UserSearchForGroupHandler user = new UserSearchForGroupHandler();
+		//response = user.process(request);
 		break;
 	    }
 	    case RequestType.CREATE_CHAT: {
@@ -162,14 +169,11 @@ public class RequestHandler extends Thread {
 		response = chat.process(request);
 		break;
 	    }
-	    /*case RequestType.FALE_UPLOAD: {
-		break;
-	    }
-	    case RequestType.FALE_READ: {
-		FileReadHandler file = new FileReadHandler();
-		response = file.process(request);
-		break;
-	    }*/
+	    /*
+	     * case RequestType.FALE_UPLOAD: { break; } case RequestType.FALE_READ: {
+	     * FileReadHandler file = new FileReadHandler(); response =
+	     * file.process(request); break; }
+	     */
 	    // следващият вид заявка да се разписва тук ^
 	    default: {
 		response = ResponseType.createErrorResponse(470);

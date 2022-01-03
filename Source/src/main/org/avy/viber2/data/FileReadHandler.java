@@ -23,7 +23,7 @@ public class FileReadHandler implements IDataHandler<Message> {
 	try {
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
-	    gsonBuilder.registerTypeAdapter(Message.class, new UserMessageEditHandler());
+	    gsonBuilder.registerTypeAdapter(Message.class, new FileReadHandler());
 	    gsonBuilder.setPrettyPrinting();
 
 	    // Създаване на json обект

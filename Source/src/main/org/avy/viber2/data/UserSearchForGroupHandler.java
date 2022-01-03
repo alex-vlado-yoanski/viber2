@@ -11,8 +11,8 @@ import org.hibernate.Session;
 
 import com.google.gson.*;
 
-public class UserSearchHandler implements IDataHandler<UserSearch> {
-    public UserSearchHandler() {
+public class UserSearchForGroupHandler implements IDataHandler<UserSearch> {
+    public UserSearchForGroupHandler() {
     }
 
     @Override
@@ -22,7 +22,7 @@ public class UserSearchHandler implements IDataHandler<UserSearch> {
 	try {
 	    // Подготвяне на json обект
 	    GsonBuilder gsonBuilder = new GsonBuilder();
-	    gsonBuilder.registerTypeAdapter(UserSearch.class, new UserSearchHandler());
+	    gsonBuilder.registerTypeAdapter(UserSearch.class, new UserSearchForGroupHandler());
 	    gsonBuilder.setPrettyPrinting();
 
 	    // Създаване на json обект
