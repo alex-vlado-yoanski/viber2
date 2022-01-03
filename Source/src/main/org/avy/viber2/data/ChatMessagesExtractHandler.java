@@ -89,11 +89,13 @@ public class ChatMessagesExtractHandler implements IDataHandler<Chat> {
 	jsonObject.addProperty("requestType", chat.getRequestType());
 
 	for (Message message : chat.getMessages()) {
-	    jsonObject.addProperty("messageID", message.getID());
-	    jsonObject.addProperty("message", message.getText());
-	    jsonObject.addProperty("date", message.getCreateDate().toString());
-	    jsonObject.addProperty("sender_username", message.getSentBy().getName());
-	    jsonObject.addProperty("sender_id", message.getSentBy().getID());
+	    JsonObject jsonMessage = new JsonObject();
+	    jsonMessage.addProperty("messageID", message.getID());
+	    jsonMessage.addProperty("message", message.getText());
+	    jsonMessage.addProperty("date", message.getCreateDate().toString());
+	    jsonMessage.addProperty("sender_username", message.getSentBy().getName());
+	    jsonMessage.addProperty("sender_id", message.getSentBy().getID());
+	    jsonArray.add(jsonMessage);
 	}
 
 	jsonObject.add("messages", jsonArray);
