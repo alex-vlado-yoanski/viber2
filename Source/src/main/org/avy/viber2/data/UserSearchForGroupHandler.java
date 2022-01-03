@@ -47,31 +47,35 @@ public class UserSearchForGroupHandler implements IDataHandler<UserSearch> {
 
 	// Обработване на заявката
 	try {
-	    Session session = DatabaseConnection.getSessionFactory().openSession();
-	    CriteriaBuilder builder = session.getCriteriaBuilder();
-	    CriteriaQuery<User> query = builder.createQuery(User.class);
-	    Root<User> root = query.from(User.class);
-	    List<Predicate> predicates = new ArrayList<Predicate>();
+	    Session userSession = DatabaseConnection.getSessionFactory().openSession();
+	    CriteriaBuilder userBuilder = userSession.getCriteriaBuilder();
+	    CriteriaQuery<User> userQuery = userBuilder.createQuery(User.class);
+	    Root<User> userRoot = userQuery.from(User.class);
+	    List<Predicate> userPredicates = new ArrayList<Predicate>();
 
 	    // Търсене на потребители по фраза
-	    predicates.add(builder.like(root.get("name"), ("%" + userSearch.getSearchingPhrase() + "%")));
-	    query.select(root).where(predicates.toArray(new Predicate[] {}));
-	    List<User> foundUsers = session.createQuery(query).getResultList();
+	    userPredicates.add(userBuilder.like(userRoot.get("name"), ("%" + userSearch.getSearchingPhrase() + "%")));
+	    userQuery.select(userRoot).where(userPredicates.toArray(new Predicate[] {}));
+	    List<User> foundUsers = userSession.createQuery(userQuery).getResultList();
 
 	    // Филтриране на резултата
 	    if (foundUsers.size() != 0) {
-		// Търсене на потребителя, който търси
-		predicates.clear();
-		predicates.add(builder.equal(root.get("ID"), userSearch.getSearchingUser().getID()));
-		query.select(root).where(predicates.toArray(new Predicate[] {}));
-		List<User> searchUsers = session.createQuery(query).getResultList();
+		Session chatSession = DatabaseConnection.getSessionFactory().openSession();
+		CriteriaBuilder chatBuilder = chatSession.getCriteriaBuilder();
+		CriteriaQuery<Chat> chatQuery = chatBuilder.createQuery(Chat.class);
+		Root<Chat> chatRoot = chatQuery.from(Chat.class);
+		List<Predicate> chatPredicates = new ArrayList<Predicate>();
 
-		if (searchUsers.size() != 0) {
-		    User searchUser = searchUsers.get(0);
+		// Търсене на потребители по фраза
+		chatPredicates.add(
+		chatBuilder.equal(chatRoot.get("ID"), userSearch.getSearchingUser().getChats().get(0).getID()));
+		chatQuery.select(chatRoot).where(chatPredicates.toArray(new Predicate[] {}));
+		List<Chat> chats = chatSession.createQuery(chatQuery).getResultList();
 
-		    List<UserInvitation> searchUserSentInvitations = searchUser.getSendInvitations();
-		    List<UserInvitation> searchUserReceivedInvitations = searchUser.getSendInvitations();
-
+		if (chats.size() != 0) {
+		    // Текущият чат, в който ще се търсят потребители за добавяне
+		    Chat chat = chats.get(0);
+		    
 		    for (User foundUser : foundUsers) {
 			// Ако потребителя е този, който търси, го пропускаме
 			if (foundUser.getID() == userSearch.getSearchingUser().getID())
@@ -79,20 +83,9 @@ public class UserSearchForGroupHandler implements IDataHandler<UserSearch> {
 
 			boolean bSkip = false;
 
-			// Ако потребителят е изпатил покана към намереният, го пропускаме
-			for (UserInvitation sentInvitation : searchUserSentInvitations) {
-			    if (sentInvitation.getSender().getID() == foundUser.getID()) {
-				bSkip = true;
-				break;
-			    }
-			}
-
-			if (bSkip)
-			    continue;
-
-			// Ако към потребителят е изпатил покана към намереният, го пропускаме
-			for (UserInvitation receivedInvitation : searchUserReceivedInvitations) {
-			    if (receivedInvitation.getReceiver().getID() == foundUser.getID()) {
+			// Ако потребителят вече е в чата, го пропускаме
+			for (User chatUser : chat.getUsers()) {
+			    if (chatUser.getID() == foundUser.getID()) {
 				bSkip = true;
 				break;
 			    }
@@ -105,7 +98,9 @@ public class UserSearchForGroupHandler implements IDataHandler<UserSearch> {
 		    }
 		}
 	    }
-	} catch (Exception e) {
+	} catch (
+
+	Exception e) {
 	    response = ResponseType.createErrorResponse(570);
 	    e.printStackTrace();
 	}
@@ -150,6 +145,11 @@ public class UserSearchForGroupHandler implements IDataHandler<UserSearch> {
 	user.setRequestType(jsonObject.get("requestType").getAsInt());
 	user.setSearchingPhrase(jsonObject.get("phrase").getAsString());
 	user.getSearchingUser().setID(jsonObject.get("userID").getAsLong());
+	user.getSearchingUser().setID(jsonObject.get("userID").getAsLong());
+
+	Chat chat = new Chat();
+	chat.setID(jsonObject.get("chatID").getAsLong());
+	user.getSearchingUser().setChat(chat);
 
 	return user;
     }

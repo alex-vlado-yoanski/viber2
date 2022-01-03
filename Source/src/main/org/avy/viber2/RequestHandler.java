@@ -96,7 +96,7 @@ public class RequestHandler extends Thread {
 	    // request =
 	    // "{\"requestType\":\"9\",\"chatID\":\"2\",\"text\":\"hello2\",\"user\":\"2\",\"messageID\":\"8\"}";
 	    // request = "{\"requestType\":\"10\",\"phrase\":\"sto\", \"userID\":\"2\"}";
-	    // request = "{\"requestType\":\"11\",\"phrase\":\"sto\", \"userID\":\"2\"}";
+	    // request = "{\"requestType\":\"11\",\"phrase\":\"sto\", \"userID\":\"1\", \"chatID\":\"5\"}";
 	    // request = "{\"requestType\":\"12\",\"userID\":\"2\"}";
 	    // request = "{\"requestType\":\"13\",\"chatID\":\"2\",\"userID\":\"1\"}";
 
@@ -155,8 +155,8 @@ public class RequestHandler extends Thread {
 		break;
 	    }
 	    case RequestType.USER_SEARCH_FOR_GROUP: {
-		//UserSearchForGroupHandler user = new UserSearchForGroupHandler();
-		//response = user.process(request);
+		UserSearchForGroupHandler user = new UserSearchForGroupHandler();
+		response = user.process(request);
 		break;
 	    }
 	    case RequestType.CREATE_CHAT: {
